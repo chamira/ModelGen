@@ -55,9 +55,14 @@ class Main {
             
             let allGoodWithModelFile = processXCDataModelFile(index: 2)
             if (allGoodWithModelFile) {
-                let data = try! readXCDataModelFile(path: modelFilePath!)
-                let gen = Generator(data)
-                gen.generate()
+                do {
+                    let data = try readXCDataModelFile(path: modelFilePath!)
+                    let gen = Generator(data)
+                    gen.generate()
+                } catch let e {
+                    consoleIO.writeMessage("Error: \(e.localizedDescription)", to: .error)
+                }
+                
             }
         }
         

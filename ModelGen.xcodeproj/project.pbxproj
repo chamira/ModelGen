@@ -12,6 +12,7 @@
 		535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */; };
 		535F4FFA1EC59ECD00DE9656 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Generator.swift */; };
 		535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */; };
+		98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C908201EC71343008696E3 /* CodeGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,7 @@
 		535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SWXMLHash+TypeConversion.swift"; sourceTree = "<group>"; };
 		535F4FF91EC59ECD00DE9656 /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
 		535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleIO.swift; sourceTree = "<group>"; };
+		98C908201EC71343008696E3 /* CodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				535F4FF41EC59E4500DE9656 /* frameworks */,
 				535F4FEA1EC4732C00DE9656 /* main.swift */,
 				535F4FF91EC59ECD00DE9656 /* Generator.swift */,
+				98C908201EC71343008696E3 /* CodeGenerator.swift */,
 				535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */,
 			);
 			path = ModelGen;
@@ -156,6 +159,7 @@
 				535F4FFA1EC59ECD00DE9656 /* Generator.swift in Sources */,
 				535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */,
 				535F4FF71EC59E5B00DE9656 /* SWXMLHash.swift in Sources */,
+				98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

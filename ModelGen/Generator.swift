@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum SupportLanguage {
+    case swift
+}
+
 enum GeneratorIndentation {
     case tab(count:Int)
     case space(count:Int)
@@ -38,24 +42,35 @@ class Generator {
     private let _xmlData:Data
     
     private var _entities:[Entity]?
-    let _indentation : GeneratorIndentation
+    let indentation : GeneratorIndentation
+    let language:SupportLanguage
     
-    init(_ xmlData:Data, indentation:GeneratorIndentation = GeneratorIndentation.space(count: 4)) {
+    init(_ xmlData:Data, lang:SupportLanguage = .swift , indent:GeneratorIndentation = GeneratorIndentation.space(count: 4)) {
         _xmlData = xmlData
-        _indentation = indentation
+        indentation = indent
+        language = lang
     }
     
     
     @discardableResult
-    func generate() -> Bool {
+    func generate() -> (Bool,String?) {
         let xml = parse()
         
         if (!validation(xml: xml)) {
-            return false
+            return (false, "XML is not validated")
         }
         
-        let x = getEntities(xml: xml)
-        return true
+        guard let x = getEntities(xml: xml) else {
+            return (false,"XML is not able to generate entities")
+        }
+        
+        let swift = SwiftCodeGenerator(entities: x, indent: indentation)
+        let files = swift.getFileConents()
+        
+        files.forEach({ (entityName,entityContents) in
+          print(entityContents)
+        })
+        return (true,nil)
     }
     
     private func parse () -> XMLIndexer {
@@ -124,7 +139,7 @@ class Generator {
                     let entity:Entity = Entity(name: name, className: clsName!, parentName: parentName, codeGenType: CodeGenType(type:codeType), attributes:attributes)
                     
                     entities.append(entity)
-                    print(entity.stringRep(indentation: _indentation))
+                    
                 }
             
             }
@@ -132,9 +147,7 @@ class Generator {
 
         }
         
-        //print("entities",entities)
-        
-        return nil
+        return entities
     }
 }
 
@@ -185,7 +198,7 @@ enum ARCType : String {
     }
 }
 
-enum AccessType : String {
+enum AccessControlType : String {
     case `private` = "private", `fileprivate` = "fileprivate", `public` = "public", open = "open", `internal` = "internal"
     init(type:String) {
         
@@ -203,20 +216,6 @@ enum AccessType : String {
         }
     }
     
-    var value:String {
-        switch self {
-        case .private:
-            return "private"
-        case .fileprivate:
-            return "fileprivate"
-        case .public:
-            return "public"
-        case .open:
-            return "open"
-        default:
-            return ""
-        }
-    }
 }
 
 enum DataType : String {
@@ -262,26 +261,6 @@ enum DataType : String {
         }
     }
     
-    func getGenType (isScalarValue:Bool = true) ->String {
-        
-        var type:String!
-        switch self {
-            case .int16: type = isScalarValue ? "Int16" : "NSNumber"
-            case .int32: type = isScalarValue ? "Int32" : "NSNumber"
-            case .int64: type = isScalarValue ? "Int64" : "NSNumber"
-            case .boolean: type = isScalarValue ? "Bool" : "NSNumber"
-            case .double: type = isScalarValue ? "Double" : "NSNumber"
-            case .float: type = isScalarValue ? "Float" : "NSNumber"
-            case .decimal: type = "NSDecimalNumber"
-            case .string: type = "String"
-            case .binary: type = "Data"
-            case .date: type = "Date"
-            default: type = "Transformable"
-            
-        }
-        
-        return type
-    }
 }
 
 struct Entity {
@@ -290,25 +269,6 @@ struct Entity {
     let parentName:String?
     let codeGenType:CodeGenType
     let attributes:[Attribute]
-    
-    func stringRep(indentation:GeneratorIndentation = GeneratorIndentation.space(count: 4))->String {
-    
-        var str = "class \(className)"
-        
-        if let _parent = parentName {
-            str += " : \(_parent) {\n\n"
-        } else {
-            str += " {\n\n"
-        }
-        
-        for att in attributes {
-            str += att.stringRep(indentation: indentation)+"\n"
-        }
-        
-        str += "\n}\n"
-        return str
-    }
-    
 }
 
 struct Attribute {
@@ -321,42 +281,19 @@ struct Attribute {
     let defaultValue:String?
     let info:AttributeInfo? = AttributeInfo.kDefault
     
-    func stringRep(indentation:GeneratorIndentation = GeneratorIndentation.space(count: 4))->String {
-        
-        var _dataType:String!
-        if dataType != .transformable {
-            _dataType = dataType.getGenType(isScalarValue: isScalarValueType.value)
-        } else {
-            if let _ = customClassName {
-                _dataType = customClassName!
-            } else {
-                _dataType = "Any"
-            }
-        }
-        
-        let _isOpt = isOptional.value ? "?" : ""
-        
-        var _default = ""
-        if let d = defaultValue , d.characters.count > 0 {
-            _default = " = \(defaultValue!)"
-        }
-        
-        let access = info?.access.value ?? ""
-        let arc = info?.arc.value ?? ""
-        let mutation = (info?.mutable.value ?? true ) ? "var" : "let"
-        
-        let str = "\(indentation.value)\(access) \(arc) \(mutation) \(name):\(_dataType!)\(_isOpt)\(_default)"
-        
-        return str.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        
+    var isMutable:Bool {
+        return info?.mutable.value ?? true
     }
     
+    var cocoaARC:String {
+        return info?.arc.value ?? ""
+    }
 }
 
 struct AttributeInfo {
     var arc:ARCType = .strong
     var mutable:BoolType = .yes
-    var access:AccessType = .internal
+    var access:AccessControlType = .internal
     static let kDefault = AttributeInfo(arc: .strong, mutable: .yes, access: .internal)
 }
 
