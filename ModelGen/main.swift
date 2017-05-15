@@ -10,13 +10,12 @@ import Foundation
 
 struct Config {
     static let version = "0.0.1"
+    static let defaultLanguage = SupportLanguage.swift.rawValue
 }
 
 class Main {
     
     let consoleIO = ConsoleIO()
-    var modelFilePath:String?
-    var dirToGenFile:String?
     
     private let xcDataModelExt = "xcdatamodel"
     
@@ -51,54 +50,71 @@ class Main {
         }
         
     
-        if (option == .file) {
+        do {
             
-            let allGoodWithModelFile = processXCDataModelFile(index: 2)
-            if (allGoodWithModelFile) {
-                do {
-                    let data = try readXCDataModelFile(path: modelFilePath!)
-                    let gen = Generator(data)
-                    gen.generate()
-                } catch let e {
-                    consoleIO.writeMessage("Error: \(e.localizedDescription)", to: .error)
-                }
-                
+            let consolOption = try consoleIO.argsSeparator(args: CommandLine.arguments)
+        
+            if consolOption.version {
+                consoleIO.writeMessage("ModelGen version:\(Config.version)")
             }
+            
+            if consolOption.help {
+                ConsoleIO.printUsage()
+            }
+            
+            if let file = consolOption.file {
+                let ret:(status:Bool,cleanFilePath:String?) = processXCDataModelFile(modelFile: file)
+                if (ret.status) {
+                    do {
+                        let data = try readXCDataModelFile(path: ret.cleanFilePath!)
+                        let gen = Generator(data, lang: consolOption.lang)
+                        gen.generate()
+                    } catch let e {
+                        consoleIO.writeMessage("Error: \(e.localizedDescription)", to: .error)
+                    }
+                    
+                }
+            }
+            
+            
+        } catch let e {
+            consoleIO.writeMessage("Error: \(e.localizedDescription)", to: .error)
         }
         
         consoleIO.writeMessage("Argument count: \(argCount) Option: \(option) value: \(value)")
         
     }
     
-    private func processXCDataModelFile(index:Int) -> Bool {
+    private func processXCDataModelFile(modelFile:String) -> (status:Bool,cleanFilePath:String?) {
         
-        modelFilePath = CommandLine.arguments[index].replacingOccurrences(of: "\"", with: "")
-        modelFilePath = modelFilePath?.replacingOccurrences(of: "\'", with: "")
-        modelFilePath = modelFilePath?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        var filePath = modelFile
+        filePath = filePath.replacingOccurrences(of: "\"", with: "")
+        filePath = filePath.replacingOccurrences(of: "\'", with: "")
+        filePath = filePath.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         
-        guard let filePath = modelFilePath, filePath.characters.count != 0 else {
+        if filePath.characters.count == 0 {
             consoleIO.writeMessage("file path length is Zero(0)", to: .error)
-            return false
+            return (false,nil)
         }
         
         let pathExt = (filePath as NSString).pathExtension
         if  pathExt != xcDataModelExt {
             consoleIO.writeMessage("Data model file must have extension of \(xcDataModelExt), your file extension is \(pathExt)", to: .error)
-            return false
+            return (false,nil)
         }
         
         if !FileManager.default.fileExists(atPath: filePath) {
             consoleIO.writeMessage("Data model file does not exist at \(filePath)", to: .error)
-            return false
+            return (false,nil)
         }
         
         if !FileManager.default.isReadableFile(atPath: filePath) {
             consoleIO.writeMessage("Data model file is not readable \(filePath)", to: .error)
-            return false
+            return (false,nil)
         }
         
         consoleIO.writeMessage("xcdatamodel file path is \(filePath)")
-        return true
+        return (true,filePath)
     }
     
     private func readXCDataModelFile(path:String) throws -> Data {

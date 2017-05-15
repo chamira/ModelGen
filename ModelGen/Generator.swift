@@ -8,8 +8,23 @@
 
 import Foundation
 
-enum SupportLanguage {
-    case swift
+
+enum SupportLanguage :String{
+    
+    case swift = "swift"
+    case kotlin = "kotlin"
+    case java = "java"
+    
+    init(lang:String) {
+        switch lang {
+        case "kotlin":
+            self = .kotlin
+        case "java":
+            self = .java
+        default:
+            self = .swift
+        }
+    }
 }
 
 enum GeneratorIndentation {
@@ -45,7 +60,7 @@ class Generator {
     let indentation : GeneratorIndentation
     let language:SupportLanguage
     
-    init(_ xmlData:Data, lang:SupportLanguage = .swift , indent:GeneratorIndentation = GeneratorIndentation.space(count: 4)) {
+    init(_ xmlData:Data, lang:SupportLanguage , indent:GeneratorIndentation = GeneratorIndentation.space(count: 4)) {
         _xmlData = xmlData
         indentation = indent
         language = lang
@@ -64,12 +79,22 @@ class Generator {
             return (false,"XML is not able to generate entities")
         }
         
-        let swift = SwiftCodeGenerator(entities: x, indent: indentation)
-        let files = swift.getFileConents()
         
-        files.forEach({ (entityName,entityContents) in
+        let codeContent: [(entityName:String,entityContent:String)]!
+       
+        switch language {
+        case .kotlin:
+            let kotlin = KotlinGenerator(entities: x, indent: indentation)
+            codeContent = kotlin.getFileConents()
+        default:
+            let swift = SwiftCodeGenerator(entities: x, indent: indentation)
+            codeContent = swift.getFileConents()
+        }
+       
+        codeContent.forEach({ (entityName,entityContents) in
           print(entityContents)
         })
+        
         return (true,nil)
     }
     
@@ -127,7 +152,6 @@ class Generator {
                                 
                                 let attribute = Attribute(name: attName, dataType: attType, isOptional: attOptional, isScalarValueType: attScalarValueType, customClassName: attCustomClassName, defaultValue: attDefaultValue)
                                 
-                            
                                 attributes.append(attribute)
                                 
                             }

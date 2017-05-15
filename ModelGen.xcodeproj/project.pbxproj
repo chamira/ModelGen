@@ -13,6 +13,13 @@
 		535F4FFA1EC59ECD00DE9656 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Generator.swift */; };
 		535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */; };
 		98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C908201EC71343008696E3 /* CodeGenerator.swift */; };
+		98D86C6B1EC98F9F007BC1EC /* ModelGenTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D86C6A1EC98F9F007BC1EC /* ModelGenTest.swift */; };
+		98D86C701EC9905E007BC1EC /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */; };
+		98D86C711EC99096007BC1EC /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF51EC59E5B00DE9656 /* SWXMLHash.swift */; };
+		98D86C721EC99096007BC1EC /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */; };
+		98D86C731EC99096007BC1EC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FEA1EC4732C00DE9656 /* main.swift */; };
+		98D86C741EC99096007BC1EC /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Generator.swift */; };
+		98D86C751EC99096007BC1EC /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C908201EC71343008696E3 /* CodeGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,10 +43,20 @@
 		535F4FF91EC59ECD00DE9656 /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
 		535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleIO.swift; sourceTree = "<group>"; };
 		98C908201EC71343008696E3 /* CodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
+		98D86C681EC98F9F007BC1EC /* ModelGenTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ModelGenTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		98D86C6A1EC98F9F007BC1EC /* ModelGenTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelGenTest.swift; sourceTree = "<group>"; };
+		98D86C6C1EC98F9F007BC1EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		535F4FE41EC4732C00DE9656 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98D86C651EC98F9F007BC1EC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -61,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				535F4FE91EC4732C00DE9656 /* ModelGen */,
+				98D86C691EC98F9F007BC1EC /* ModelGenTest */,
 				535F4FE81EC4732C00DE9656 /* Products */,
 				4E85E1D578C540DCD9B6DD14 /* Frameworks */,
 			);
@@ -70,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				535F4FE71EC4732C00DE9656 /* ModelGen */,
+				98D86C681EC98F9F007BC1EC /* ModelGenTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +114,15 @@
 			name = frameworks;
 			sourceTree = "<group>";
 		};
+		98D86C691EC98F9F007BC1EC /* ModelGenTest */ = {
+			isa = PBXGroup;
+			children = (
+				98D86C6A1EC98F9F007BC1EC /* ModelGenTest.swift */,
+				98D86C6C1EC98F9F007BC1EC /* Info.plist */,
+			);
+			path = ModelGenTest;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -115,6 +143,23 @@
 			productReference = 535F4FE71EC4732C00DE9656 /* ModelGen */;
 			productType = "com.apple.product-type.tool";
 		};
+		98D86C671EC98F9F007BC1EC /* ModelGenTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 98D86C6F1EC98F9F007BC1EC /* Build configuration list for PBXNativeTarget "ModelGenTest" */;
+			buildPhases = (
+				98D86C641EC98F9F007BC1EC /* Sources */,
+				98D86C651EC98F9F007BC1EC /* Frameworks */,
+				98D86C661EC98F9F007BC1EC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ModelGenTest;
+			productName = ModelGenTest;
+			productReference = 98D86C681EC98F9F007BC1EC /* ModelGenTest.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -128,6 +173,11 @@
 					535F4FE61EC4732C00DE9656 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = R3F8V843CL;
+						ProvisioningStyle = Automatic;
+					};
+					98D86C671EC98F9F007BC1EC = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = Z9E6AHNZ26;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -145,9 +195,20 @@
 			projectRoot = "";
 			targets = (
 				535F4FE61EC4732C00DE9656 /* ModelGen */,
+				98D86C671EC98F9F007BC1EC /* ModelGenTest */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		98D86C661EC98F9F007BC1EC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		535F4FE31EC4732C00DE9656 /* Sources */ = {
@@ -160,6 +221,20 @@
 				535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */,
 				535F4FF71EC59E5B00DE9656 /* SWXMLHash.swift in Sources */,
 				98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98D86C641EC98F9F007BC1EC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98D86C711EC99096007BC1EC /* SWXMLHash.swift in Sources */,
+				98D86C721EC99096007BC1EC /* SWXMLHash+TypeConversion.swift in Sources */,
+				98D86C731EC99096007BC1EC /* main.swift in Sources */,
+				98D86C741EC99096007BC1EC /* Generator.swift in Sources */,
+				98D86C751EC99096007BC1EC /* CodeGenerator.swift in Sources */,
+				98D86C701EC9905E007BC1EC /* ConsoleIO.swift in Sources */,
+				98D86C6B1EC98F9F007BC1EC /* ModelGenTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +353,34 @@
 			};
 			name = Release;
 		};
+		98D86C6D1EC98F9F007BC1EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = Z9E6AHNZ26;
+				INFOPLIST_FILE = ModelGenTest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.arangaya.ModelGenTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		98D86C6E1EC98F9F007BC1EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = Z9E6AHNZ26;
+				INFOPLIST_FILE = ModelGenTest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.arangaya.ModelGenTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -298,6 +401,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		98D86C6F1EC98F9F007BC1EC /* Build configuration list for PBXNativeTarget "ModelGenTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				98D86C6D1EC98F9F007BC1EC /* Debug */,
+				98D86C6E1EC98F9F007BC1EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

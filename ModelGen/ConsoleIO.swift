@@ -28,11 +28,48 @@ enum OptionType: String {
     }
 }
 
+struct ConsolOption : Equatable {
+    
+    let consolValueDictionary:[String:String]
+    
+    var version:Bool = false
+    var help:Bool = false
+    var file:String? = nil
+    var path:String? = nil
+    var lang:SupportLanguage = SupportLanguage(lang: Config.defaultLanguage)
+    
+    init(dict:[String:String]) {
+        consolValueDictionary = dict
+        
+        version = (dict["version"] == "true")
+        help = (dict["help"] == "true")
+        
+        if let f = dict["file"] {
+            file = (f.characters.count > 0 ? f : nil)
+        }
+
+        if let p = dict["path"] {
+            path = (p.characters.count > 0 ? p : nil)
+        }
+        
+        if let l = dict["lang"] {
+            lang = (l.characters.count > 0 ? SupportLanguage(lang:l) : SupportLanguage(lang: Config.defaultLanguage))
+        }
+    }
+    
+    static func ==(lhs:ConsolOption, rhs:ConsolOption) -> Bool {
+        return (lhs.version == rhs.version) && (lhs.help == rhs.help) &&
+            (lhs.file == rhs.file) && (lhs.path == rhs.path) && (lhs.lang == rhs.lang)
+    }
+}
+
+
 
 enum OutputType {
     case error
     case standard
 }
+
 
 class ConsoleIO {
     class func printUsage() {
@@ -42,6 +79,8 @@ class ConsoleIO {
         print("\(executableName) -f pathToDataModel")
         print("or")
         print("\(executableName) -p pathToDirToGenerateFiles")
+        print("or")
+        print("\(executableName) -l language(swift,java,kotlin)")
         print("or")
         print("\(executableName) -v version")
         print("or")
@@ -62,27 +101,66 @@ class ConsoleIO {
         return (OptionType(value: option), option)
     }
     
-    func argsManager(args:[String]) throws ->[String:String] {
+    func argsSeparator(args:[String]) throws -> ConsolOption {
         
-        let fileIndex = try optionIndexFinder(option: .file, args: args)
-        let filePathIndex = fileIndex + 1
-        let filePath = args[filePathIndex]
+        if (args.count == 1) {
+            throw NSError(domain: "com.modelGen", code: 1, userInfo: [NSLocalizedDescriptionKey:"Not enough args passed: \(args.count)"])
+        }
         
-        let genIndex = try optionIndexFinder(option: .genPath, args: args)
-        let genPathIndex = genIndex + 1
-        let genPath = args[genPathIndex]
+        var filePath:String!
+        do {
+            let fileIndex = try optionIndexFinder(option: .file, args: args)
+            let filePathIndex = fileIndex + 1
+            filePath = args[filePathIndex]
+        } catch {
+            filePath = ""
+        }
         
-        let langIndex = try optionIndexFinder(option: .lang, args: args)
-        let langValueIndex = langIndex + 1
-        let lang = args[langValueIndex]
+        var genPath:String!
+        do {
+            let genIndex = try optionIndexFinder(option: .genPath, args: args)
+            let genPathIndex = genIndex + 1
+            genPath = args[genPathIndex]
+        } catch {
+            genPath = ""
+        }
         
-        return ["file":filePath,"path":genPath,"lang":lang]
+        var lang:String!
+        do {
+            let langIndex = try optionIndexFinder(option: .lang, args: args)
+            let langValueIndex = langIndex + 1
+            lang = args[langValueIndex]
+        } catch {
+            lang = Config.defaultLanguage
+        }
+        
+        var helpText = "false"
+        do {
+            let _ = try optionIndexFinder(option: .help, args: args)
+            helpText = "true"
+        } catch {
+            helpText = "false"
+        }
+
+        var versionText = "false"
+        do {
+            let _ = try optionIndexFinder(option: .version, args: args)
+            versionText = "true"
+        } catch {
+            helpText = "false"
+        }
+
+        let dict = ["file":filePath,"path":genPath,"lang":lang, "help":helpText, "version":versionText]
+        let optionSet = ConsolOption(dict: dict as! [String : String])
+        return optionSet
         
     }
     
     private func optionIndexFinder(option:OptionType,args:[String]) throws -> Int {
-        guard let index = args.index(of: option.rawValue) else {
-            throw NSError(domain: "com.modelGen", code: 1, userInfo: [NSLocalizedDescriptionKey:"\(option.rawValue) option is not available on the args list"])
+        
+        let value = "-"+option.rawValue
+        guard let index = args.index(of: value) else {
+            throw NSError(domain: "com.modelGen", code: 2, userInfo: [NSLocalizedDescriptionKey:"\(value) option is not available on the args list"])
         }
         
         return index

@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol CodeGeneratorProtocol {
+    func getFileConents() -> [(entityName:String,entityContent:String)]
+}
+
 class CodeGenerator {
     
     let entities:[Entity]
@@ -20,7 +24,7 @@ class CodeGenerator {
     
 }
 
-class SwiftCodeGenerator : CodeGenerator {
+class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
     
     func getFileConents() -> [(entityName:String,entityContent:String)] {
         
@@ -116,4 +120,17 @@ class SwiftCodeGenerator : CodeGenerator {
         }
     }
 
+}
+
+class KotlinGenerator : CodeGenerator , CodeGeneratorProtocol {
+    
+    func getFileConents() -> [(entityName: String, entityContent: String)] {
+        var files:[(entityName:String,entityContent:String)] = [(entityName:String,entityContent:String)]()
+        for entity in entities {
+            let str = "class {}"
+            files.append((entityName: entity.className, entityContent:str))
+        }
+        
+        return files
+    }
 }
