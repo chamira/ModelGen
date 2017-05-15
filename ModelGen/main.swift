@@ -70,7 +70,6 @@ class Main {
         
     }
     
-    
     private func processXCDataModelFile(index:Int) -> Bool {
         
         modelFilePath = CommandLine.arguments[index].replacingOccurrences(of: "\"", with: "")

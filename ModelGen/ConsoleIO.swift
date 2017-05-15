@@ -11,6 +11,7 @@ import Foundation
 enum OptionType: String {
     case file = "f"
     case genPath = "p"
+    case lang = "l"
     case help = "h"
     case version = "v"
     case unknown
@@ -19,6 +20,7 @@ enum OptionType: String {
         switch value {
         case "f": self = .file
         case "p": self = .genPath
+        case "l": self = .lang
         case "v": self = .version
         case "h": self = .help
         default: self = .unknown
@@ -60,4 +62,29 @@ class ConsoleIO {
         return (OptionType(value: option), option)
     }
     
+    func argsManager(args:[String]) throws ->[String:String] {
+        
+        let fileIndex = try optionIndexFinder(option: .file, args: args)
+        let filePathIndex = fileIndex + 1
+        let filePath = args[filePathIndex]
+        
+        let genIndex = try optionIndexFinder(option: .genPath, args: args)
+        let genPathIndex = genIndex + 1
+        let genPath = args[genPathIndex]
+        
+        let langIndex = try optionIndexFinder(option: .lang, args: args)
+        let langValueIndex = langIndex + 1
+        let lang = args[langValueIndex]
+        
+        return ["file":filePath,"path":genPath,"lang":lang]
+        
+    }
+    
+    private func optionIndexFinder(option:OptionType,args:[String]) throws -> Int {
+        guard let index = args.index(of: option.rawValue) else {
+            throw NSError(domain: "com.modelGen", code: 1, userInfo: [NSLocalizedDescriptionKey:"\(option.rawValue) option is not available on the args list"])
+        }
+        
+        return index
+    }
 }
