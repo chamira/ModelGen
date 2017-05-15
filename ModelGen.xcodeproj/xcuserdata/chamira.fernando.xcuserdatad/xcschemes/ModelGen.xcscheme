@@ -63,11 +63,19 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
+            argument = "-p"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "~/Desktop"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-f"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Volumes/dev/iOS/TestProjects/ModelTest/ModelTest/ObjectModel.xcdatamodeld/ObjectModel.xcdatamodel"
+            argument = "/Volumes/dev/iOS/TestProjects/ModelTest/ModelTest/ObjectModel.xcdatamodeld"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

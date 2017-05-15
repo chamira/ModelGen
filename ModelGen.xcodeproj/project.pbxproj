@@ -10,15 +10,17 @@
 		535F4FEB1EC4732C00DE9656 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FEA1EC4732C00DE9656 /* main.swift */; };
 		535F4FF71EC59E5B00DE9656 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF51EC59E5B00DE9656 /* SWXMLHash.swift */; };
 		535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */; };
-		535F4FFA1EC59ECD00DE9656 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Generator.swift */; };
+		535F4FFA1EC59ECD00DE9656 /* Processor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Processor.swift */; };
 		535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */; };
+		53F21DA11EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */; };
+		53F21DA21EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */; };
 		98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C908201EC71343008696E3 /* CodeGenerator.swift */; };
 		98D86C6B1EC98F9F007BC1EC /* ModelGenTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D86C6A1EC98F9F007BC1EC /* ModelGenTest.swift */; };
 		98D86C701EC9905E007BC1EC /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */; };
 		98D86C711EC99096007BC1EC /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF51EC59E5B00DE9656 /* SWXMLHash.swift */; };
 		98D86C721EC99096007BC1EC /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */; };
 		98D86C731EC99096007BC1EC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FEA1EC4732C00DE9656 /* main.swift */; };
-		98D86C741EC99096007BC1EC /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Generator.swift */; };
+		98D86C741EC99096007BC1EC /* Processor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Processor.swift */; };
 		98D86C751EC99096007BC1EC /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C908201EC71343008696E3 /* CodeGenerator.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,8 +42,9 @@
 		535F4FF21EC47C7C00DE9656 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = "../../../_ios-derived-data/Debug/SWXMLHash/SWXMLHash.framework"; sourceTree = "<group>"; };
 		535F4FF51EC59E5B00DE9656 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
 		535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SWXMLHash+TypeConversion.swift"; sourceTree = "<group>"; };
-		535F4FF91EC59ECD00DE9656 /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
+		535F4FF91EC59ECD00DE9656 /* Processor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Processor.swift; sourceTree = "<group>"; };
 		535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleIO.swift; sourceTree = "<group>"; };
+		53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeFileSaver.swift; sourceTree = "<group>"; };
 		98C908201EC71343008696E3 /* CodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 		98D86C681EC98F9F007BC1EC /* ModelGenTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ModelGenTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98D86C6A1EC98F9F007BC1EC /* ModelGenTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelGenTest.swift; sourceTree = "<group>"; };
@@ -98,9 +101,10 @@
 			children = (
 				535F4FF41EC59E4500DE9656 /* frameworks */,
 				535F4FEA1EC4732C00DE9656 /* main.swift */,
-				535F4FF91EC59ECD00DE9656 /* Generator.swift */,
+				535F4FF91EC59ECD00DE9656 /* Processor.swift */,
 				98C908201EC71343008696E3 /* CodeGenerator.swift */,
 				535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */,
+				53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */,
 			);
 			path = ModelGen;
 			sourceTree = "<group>";
@@ -217,7 +221,8 @@
 			files = (
 				535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */,
 				535F4FEB1EC4732C00DE9656 /* main.swift in Sources */,
-				535F4FFA1EC59ECD00DE9656 /* Generator.swift in Sources */,
+				535F4FFA1EC59ECD00DE9656 /* Processor.swift in Sources */,
+				53F21DA11EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */,
 				535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */,
 				535F4FF71EC59E5B00DE9656 /* SWXMLHash.swift in Sources */,
 				98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */,
@@ -230,8 +235,9 @@
 			files = (
 				98D86C711EC99096007BC1EC /* SWXMLHash.swift in Sources */,
 				98D86C721EC99096007BC1EC /* SWXMLHash+TypeConversion.swift in Sources */,
+				53F21DA21EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */,
 				98D86C731EC99096007BC1EC /* main.swift in Sources */,
-				98D86C741EC99096007BC1EC /* Generator.swift in Sources */,
+				98D86C741EC99096007BC1EC /* Processor.swift in Sources */,
 				98D86C751EC99096007BC1EC /* CodeGenerator.swift in Sources */,
 				98D86C701EC9905E007BC1EC /* ConsoleIO.swift in Sources */,
 				98D86C6B1EC98F9F007BC1EC /* ModelGenTest.swift in Sources */,
@@ -409,6 +415,7 @@
 				98D86C6E1EC98F9F007BC1EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

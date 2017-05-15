@@ -9,7 +9,12 @@
 import Foundation
 
 protocol CodeGeneratorProtocol {
-    func getFileConents() -> [(entityName:String,entityContent:String)]
+    func getFileConents() -> [EntityFileContentHolder]
+}
+
+struct EntityFileContentHolder {
+    let entity:Entity
+    let content:String
 }
 
 class CodeGenerator {
@@ -26,12 +31,12 @@ class CodeGenerator {
 
 class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
     
-    func getFileConents() -> [(entityName:String,entityContent:String)] {
+    func getFileConents() -> [EntityFileContentHolder] {
         
-        var files:[(entityName:String,entityContent:String)] = [(entityName:String,entityContent:String)]()
+        var files:[EntityFileContentHolder] = [EntityFileContentHolder]()
         for entity in entities {
             let str = getEntityString(entity: entity)
-            files.append((entityName: entity.className, entityContent:str))
+            files.append(EntityFileContentHolder(entity: entity, content: str))
         }
         
         return files
@@ -124,11 +129,11 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
 
 class KotlinGenerator : CodeGenerator , CodeGeneratorProtocol {
     
-    func getFileConents() -> [(entityName: String, entityContent: String)] {
-        var files:[(entityName:String,entityContent:String)] = [(entityName:String,entityContent:String)]()
+    func getFileConents() -> [EntityFileContentHolder] {
+        var files:[EntityFileContentHolder] = [EntityFileContentHolder]()
         for entity in entities {
-            let str = "class {}"
-            files.append((entityName: entity.className, entityContent:str))
+            let str = "class \(entity.className)\n{\n}"
+            files.append(EntityFileContentHolder(entity: entity, content: str))
         }
         
         return files

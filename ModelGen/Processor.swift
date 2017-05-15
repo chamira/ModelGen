@@ -9,7 +9,7 @@
 import Foundation
 
 
-enum SupportLanguage :String{
+enum SupportLanguage :String {
     
     case swift = "swift"
     case kotlin = "kotlin"
@@ -25,9 +25,20 @@ enum SupportLanguage :String{
             self = .swift
         }
     }
+    
+    var `extension`:String {
+        switch self {
+        case .kotlin:
+            return "kotlin"
+        case .java:
+            return "java"
+        default:
+            return "swift"
+        }
+    }
 }
 
-enum GeneratorIndentation {
+enum GeneratorIndentation : Equatable {
     case tab(count:Int)
     case space(count:Int)
     
@@ -50,57 +61,182 @@ enum GeneratorIndentation {
         return str
     }
     
-}
-
-class Generator {
-    
-    private let _xmlData:Data
-    
-    private var _entities:[Entity]?
-    let indentation : GeneratorIndentation
-    let language:SupportLanguage
-    
-    init(_ xmlData:Data, lang:SupportLanguage , indent:GeneratorIndentation = GeneratorIndentation.space(count: 4)) {
-        _xmlData = xmlData
-        indentation = indent
-        language = lang
+    init(value:String) {
+        
+        let sep = value.components(separatedBy: ":")
+        if (sep.count == 2) {
+            
+            if let type = sep.first?.lowercased(), let count = Int(sep[1]) {
+                if type == "tab" || type == "tabs" {
+                    self = .tab(count: count)
+                } else {
+                    self = .space(count: count)
+                }
+            }
+            self = .space(count: 4)
+        } else {
+            self = .space(count: 4)
+        }
     }
     
+    static func ==(lhs:GeneratorIndentation, rhs:GeneratorIndentation) -> Bool {
+        return lhs.value == rhs.value
+    }
+    
+}
+
+class Processor {
+    
+    private var _xmlData:Data!
+
+    var indentation : GeneratorIndentation!
+    var language:SupportLanguage = SupportLanguage(lang: Config.defaultLanguage)
+    let consoleOption:ConsoleOption
+    
+    init(consoleOption:ConsoleOption) {
+        self.consoleOption = consoleOption
+        self.language = consoleOption.lang
+        self.indentation = consoleOption.indent
+    }
+    
+    func process() -> (status:Bool,message:String?, type:ConsoleOutputType?){
+     
+        guard let file = consoleOption.file else {
+            return (false, "No model file is defined", .error)
+        }
+        
+        let ret:(status:Bool,cleanFilePath:String?) = processXCDataModelFile(modelFile: file)
+        
+        guard ret.status == true else {
+            return (false, ret.cleanFilePath!, .error)
+        }
+        
+        do {
+            
+            let data = try readXCDataModelFile(path: ret.cleanFilePath!)
+            let gen:(status:Bool,entities:[Entity]?,msg:String?) = self.generateEntities(xmlData: data)
+            
+            if gen.status == true {
+                
+                //gen.generate()
+                
+                let codeContent: [EntityFileContentHolder]!
+                
+                switch language {
+                case .kotlin:
+                    let kotlin = KotlinGenerator(entities: gen.entities!, indent: indentation)
+                    codeContent = kotlin.getFileConents()
+                default:
+                    let swift = SwiftCodeGenerator(entities: gen.entities!, indent: indentation)
+                    codeContent = swift.getFileConents()
+                }
+                
+                let saver = CodeFileSaver(files: codeContent, language: language, path: getFileSavingPath(), createNewDir: true)
+                
+                do {
+                    
+                    let ret = try saver.save()
+                    return (true, ret, .standard)
+                    
+                } catch let e {
+                    return (false, e.localizedDescription, .error)
+                }
+                
+            
+            } else {
+                return (false, gen.msg, .error)
+            }
+            
+        } catch let e {
+            return (false,"Error: \(e.localizedDescription)",.error)
+        }
+    }
+    
+    private func getModelName(filepath:String)->String {
+        
+        let path = (filepath as NSString).lastPathComponent
+        let name = path.replacingOccurrences(of: Config.xcDataModelExt, with: "").replacingOccurrences(of: ".", with: "")
+        return name.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        
+    }
+    
+    private func getFileSavingPath()->String {
+        if let filePath = consoleOption.path {
+            return filePath
+        }
+        
+        if let file = consoleOption.file {
+            var comps = (file as NSString).pathComponents
+            let _ = comps.removeLast()
+            if let first = comps.first, first == "/" {
+                let _ = comps.removeFirst()
+            }
+            let join = "/"+comps.joined(separator: "/")+"/"
+            return join
+        }
+        
+        return ""
+    }
+    
+    private func processXCDataModelFile(modelFile:String) -> (status:Bool,cleanFilePath:String?) {
+        
+        var filePath = modelFile
+        filePath = filePath.replacingOccurrences(of: "\"", with: "")
+        filePath = filePath.replacingOccurrences(of: "\'", with: "")
+        filePath = filePath.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        
+        if filePath.characters.count == 0 {
+            return (false,"file path length is Zero(0)")
+        }
+        
+        let pathExt = (filePath as NSString).pathExtension
+        if  pathExt != Config.xcDataModelExt {
+            return (false,"Data model file must have extension of \(Config.xcDataModelExt), your file extension is \(pathExt)")
+        }
+        
+        let pathWithContent = filePath + "/\(getModelName(filepath: filePath)).xcdatamodel/contents"
+        if !FileManager.default.fileExists(atPath: pathWithContent) {
+            return (false,"Data model file does not exist at \(pathWithContent)")
+        }
+        
+        if !FileManager.default.isReadableFile(atPath: pathWithContent) {
+            return (false,"Data model file is not readable \(pathWithContent)")
+        }
+        
+        return (true,pathWithContent)
+    }
+    
+    private func readXCDataModelFile(path:String) throws -> Data {
+       
+        
+        do {
+            let fileUrl =  URL(fileURLWithPath: path)
+            let data = try Data(contentsOf:fileUrl)
+            return data
+        } catch let e  {
+            throw e
+        }
+    }
     
     @discardableResult
-    func generate() -> (Bool,String?) {
-        let xml = parse()
+    func generateEntities(xmlData:Data) -> (Bool,[Entity]?,String?) {
+        let xml = parse(xmlData: xmlData)
         
         if (!validation(xml: xml)) {
-            return (false, "XML is not validated")
+            return (false, nil, "XML is not validated")
         }
         
         guard let x = getEntities(xml: xml) else {
-            return (false,"XML is not able to generate entities")
+            return (false, nil, "XML is not able to generate entities")
         }
         
+        return (true, x, nil)
         
-        let codeContent: [(entityName:String,entityContent:String)]!
-       
-        switch language {
-        case .kotlin:
-            let kotlin = KotlinGenerator(entities: x, indent: indentation)
-            codeContent = kotlin.getFileConents()
-        default:
-            let swift = SwiftCodeGenerator(entities: x, indent: indentation)
-            codeContent = swift.getFileConents()
-        }
-       
-        codeContent.forEach({ (entityName,entityContents) in
-          print(entityContents)
-        })
-        
-        return (true,nil)
     }
     
-    private func parse () -> XMLIndexer {
+    private func parse (xmlData:Data) -> XMLIndexer {
      
-        let xml = SWXMLHash.parse(_xmlData)
+        let xml = SWXMLHash.parse(xmlData)
         return xml
         
     }
