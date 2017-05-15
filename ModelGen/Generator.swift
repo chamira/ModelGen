@@ -150,14 +150,41 @@ class Generator {
                                 let attCustomClassName = fieldAttributes[kXMLAttribute.customClassName]?.text
                                 let attOptional = BoolType(value:fieldAttributes[kXMLAttribute.optional]?.text ?? kXMLValue.yes)
                                 
-                                let attribute = Attribute(name: attName, dataType: attType, isOptional: attOptional, isScalarValueType: attScalarValueType, customClassName: attCustomClassName, defaultValue: attDefaultValue)
+                                let userInfo = field[kXMLElement.userInfo]
+                                
+                                var info = AttributeInfo.kDefault
+                                for eachUserInfo in userInfo {
+                                    
+                                    let entries = eachUserInfo[kXMLElement.entry]
+                                    for eachEntry in entries {
+                                        
+                                        if let entryAtt = eachEntry.element?.allAttributes {
+                                            
+                                            if let key = entryAtt[kXMLAttribute.key]?.text, let value = entryAtt[kXMLAttribute.value]?.text {
+                                            
+                                                if key == kXMLValue.access {
+                                                    info.access = AccessControlType(type: value)
+                                                } else if key == kXMLValue.arc {
+                                                    info.arc = ARCType(type: value)
+                                                } else if key == kXMLValue.mutable {
+                                                    info.mutable = BoolType(value: value)
+                                                }
+                                            }
+                                            
+                                        }
+                                    }
+                                    
+                                }
+                                
+                                let attribute = Attribute(name: attName, dataType: attType, isOptional: attOptional, isScalarValueType: attScalarValueType, customClassName: attCustomClassName, defaultValue: attDefaultValue, info: info)
                                 
                                 attributes.append(attribute)
+
                                 
                             }
+                            
                         }
-                        
-                        
+
                     }
                     
                     let entity:Entity = Entity(name: name, className: clsName!, parentName: parentName, codeGenType: CodeGenType(type:codeType), attributes:attributes)
@@ -303,7 +330,7 @@ struct Attribute {
     let isScalarValueType:BoolType
     let customClassName:String?
     let defaultValue:String?
-    let info:AttributeInfo? = AttributeInfo.kDefault
+    var info:AttributeInfo? = AttributeInfo.kDefault
     
     var isMutable:Bool {
         return info?.mutable.value ?? true
@@ -326,6 +353,8 @@ struct kXMLElement {
     static let root = "model"
     static let entity = "entity"
     static let attribute = "attribute"
+    static let userInfo = "userInfo"
+    static let entry = "entry"
 }
 
 struct kXMLAttribute {
@@ -338,10 +367,22 @@ struct kXMLAttribute {
     static let defaultValueString = "defaultValueString"
     static let usesScalarValueType = "usesScalarValueType"
     static let optional = "optional"
+    static let key = "key"
+    static let value = "value"
 }
 
 struct kXMLValue {
     static let yes = "YES"
     static let no = "NO"
     static let transformable = "Transformable"
+    static let access = "access"
+    static let `private` = "private"
+    static let `public` = "public"
+    static let `internal` = "intenal"
+    static let `fileprivate` = "fileprivate"
+    static let `open` = "open"
+    static let arc = "arc"
+    static let weak = "weak"
+    static let strong = "strong"
+    static let mutable = "mutable"
 }
