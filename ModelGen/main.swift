@@ -33,7 +33,7 @@ class Main {
         }
         
         let argument = CommandLine.arguments[1]
-        let (option, value) = consoleIO.getOption(argument.substring(from: argument.characters.index(argument.startIndex, offsetBy: 1)))
+        let (option, _) = consoleIO.getOption(argument.substring(from: argument.characters.index(argument.startIndex, offsetBy: 1)))
         
         if (argCount == 2) {
         
@@ -70,13 +70,12 @@ class Main {
                 consoleIO.writeMessage(response.message!, to: response.type!)
             }  else {
                 consoleIO.writeMessage(response.message!)
-                consoleIO.writeMessage("Done")
+                consoleIO.writeMessage("*** DONE ***\n")
             }
+            
         } catch let e {
             consoleIO.writeMessage("Error: \(e.localizedDescription)", to: .error)
         }
-        
-        consoleIO.writeMessage("Argument count: \(argCount) Option: \(option) value: \(value)")
         
     }
         

@@ -46,16 +46,18 @@ class CodeFileSaver {
         for eachEntity in files {
             
             var s:CodeFileSaverStatus!
-            let fileName = eachEntity.entity.className+"."+language.extension
+            let _fileName = eachEntity.entity.className+"."+language.extension
             do {
                
-                let fileName = dirToWrite.1!+"/"+fileName
+                let _dirToWrite = dirToWrite.1!
+                let fileName = (_dirToWrite + (_dirToWrite.hasSuffix("/") ? "" :"/") + _fileName).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                
                 try eachEntity.content.write(toFile: fileName, atomically: true, encoding: String.Encoding.utf8)
                 
                 s = CodeFileSaverStatus(fileName: fileName, status: (true,fileName))
                 
             } catch let e {
-                s = CodeFileSaverStatus(fileName: fileName, status: (false,e.localizedDescription))
+                s = CodeFileSaverStatus(fileName: _fileName, status: (false,e.localizedDescription))
             }
             
             status.append(s.description)
@@ -67,7 +69,7 @@ class CodeFileSaver {
     
     func createNewDir(path:String) -> (Bool,String?){
         
-        let newPath =  path+"/"+getNewDirName()
+        let newPath =  (path + (path.hasSuffix("/") ? "" : "/") + getNewDirName()).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         
         if FileManager.default.fileExists(atPath: newPath) {
             return (true,newPath)

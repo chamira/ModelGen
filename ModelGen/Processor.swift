@@ -186,13 +186,7 @@ class Processor {
         }
         
         if let file = consoleOption.file {
-            var comps = (file as NSString).pathComponents
-            let _ = comps.removeLast()
-            if let first = comps.first, first == "/" {
-                let _ = comps.removeFirst()
-            }
-            let join = "/"+comps.joined(separator: "/")+"/"
-            return join
+            return (file as NSString).deletingLastPathComponent
         }
         
         return ""
@@ -263,10 +257,6 @@ class Processor {
     
     private func validation(xml:XMLIndexer) -> Bool {
         //TODO:
-        guard let genLanguage = xml[kXMLElement.root].element?.attribute(by: "sourceLanguage")?.text else {
-            return false
-        }
-        print(genLanguage)
         return true
     }
     
@@ -304,7 +294,7 @@ class Processor {
                                 let attScalarValueType = BoolType(value:fieldAttributes[kXMLAttribute.usesScalarValueType]?.text ?? kXMLValue.yes)
                                 let attDefaultValue = fieldAttributes[kXMLAttribute.defaultValueString]?.text ?? ""
                                 let attCustomClassName = fieldAttributes[kXMLAttribute.customClassName]?.text
-                                let attOptional = BoolType(value:fieldAttributes[kXMLAttribute.optional]?.text ?? kXMLValue.yes)
+                                let attOptional = BoolType(value:fieldAttributes[kXMLAttribute.optional]?.text ?? kXMLValue.no)
                                 
                                 let userInfo = field[kXMLElement.userInfo]
                                 
@@ -478,7 +468,7 @@ struct Entity {
     let attributes:[Attribute]
 }
 
-struct Attribute {
+struct Attribute : Equatable {
     
     let name:String
     let dataType:DataType
@@ -494,6 +484,10 @@ struct Attribute {
     
     var cocoaARC:String {
         return info?.arc.value ?? ""
+    }
+    
+    static func ==(lhs:Attribute, rhs:Attribute)->Bool {
+        return lhs.name == rhs.name && lhs.dataType.rawValue == rhs.dataType.rawValue
     }
 }
 

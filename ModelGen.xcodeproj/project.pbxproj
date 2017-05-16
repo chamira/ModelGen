@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		535625EB1ECB40240084E97B /* SwiftCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */; };
 		535F4FEB1EC4732C00DE9656 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FEA1EC4732C00DE9656 /* main.swift */; };
 		535F4FF71EC59E5B00DE9656 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF51EC59E5B00DE9656 /* SWXMLHash.swift */; };
 		535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCodeGenerator.swift; sourceTree = "<group>"; };
 		535F4FE71EC4732C00DE9656 /* ModelGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ModelGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		535F4FEA1EC4732C00DE9656 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		535F4FF21EC47C7C00DE9656 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = "../../../_ios-derived-data/Debug/SWXMLHash/SWXMLHash.framework"; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				98C908201EC71343008696E3 /* CodeGenerator.swift */,
 				535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */,
 				53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */,
+				535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */,
 			);
 			path = ModelGen;
 			sourceTree = "<group>";
@@ -221,6 +224,7 @@
 			files = (
 				535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */,
 				535F4FEB1EC4732C00DE9656 /* main.swift in Sources */,
+				535625EB1ECB40240084E97B /* SwiftCodeGenerator.swift in Sources */,
 				535F4FFA1EC59ECD00DE9656 /* Processor.swift in Sources */,
 				53F21DA11EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */,
 				535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */,
