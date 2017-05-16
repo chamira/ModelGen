@@ -72,8 +72,9 @@ enum GeneratorIndentation : Equatable {
                 } else {
                     self = .space(count: count)
                 }
+            } else {
+                self = .space(count: 4)
             }
-            self = .space(count: 4)
         } else {
             self = .space(count: 4)
         }

@@ -78,6 +78,14 @@
             argument = "/Volumes/dev/iOS/TestProjects/ModelTest/ModelTest/ObjectModel.xcdatamodeld"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-i"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "tab:5"
+            isEnabled = "YES">
+         </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
