@@ -127,6 +127,20 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
 
 }
 
+
+class JavaGenerator : CodeGenerator , CodeGeneratorProtocol {
+    
+    func getFileConents() -> [EntityFileContentHolder] {
+        var files:[EntityFileContentHolder] = [EntityFileContentHolder]()
+        for entity in entities {
+            let str = "class \(entity.className)\n{\n}"
+            files.append(EntityFileContentHolder(entity: entity, content: str))
+        }
+        
+        return files
+    }
+}
+
 class KotlinGenerator : CodeGenerator , CodeGeneratorProtocol {
     
     func getFileConents() -> [EntityFileContentHolder] {

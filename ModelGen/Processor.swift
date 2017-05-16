@@ -15,14 +15,16 @@ enum SupportLanguage :String {
     case kotlin = "kotlin"
     case java = "java"
     
-    init(lang:String) {
-        switch lang {
+    init(lang:String) throws {
+        switch lang.lowercased() {
         case "kotlin":
             self = .kotlin
         case "java":
             self = .java
-        default:
+        case "swift":
             self = .swift
+        default:
+            throw NSError(domain: Config.errorDomain, code: 5, userInfo: [NSLocalizedDescriptionKey: "Language \(lang) is not supported"])
         }
     }
     
@@ -32,7 +34,7 @@ enum SupportLanguage :String {
             return "kotlin"
         case .java:
             return "java"
-        default:
+        case .swift:
             return "swift"
         }
     }
@@ -61,29 +63,41 @@ enum GeneratorIndentation : Equatable {
         return str
     }
     
-    init(value:String) {
+    init(value:String) throws {
         
-        let sep = value.components(separatedBy: ":")
-        if (sep.count == 2) {
-            
-            if let type = sep.first?.lowercased(), let count = Int(sep[1]) {
-                if type == "tab" || type == "tabs" {
-                    self = .tab(count: count)
-                } else {
-                    self = .space(count: count)
-                }
-            } else {
-                self = .space(count: 4)
-            }
-        } else {
+        if (value.characters.count == 0 ) {
             self = .space(count: 4)
+        } else {
+            
+            let sep = value.components(separatedBy: ":")
+            if (sep.count == 2) {
+                
+                if let type = sep.first?.lowercased(), let count = Int(sep[1]) {
+                    if type == "tab" || type == "tabs" {
+                        self = .tab(count: count)
+                    } else if type == "space" || type == "spaces" {
+                        self = .space(count: count)
+                    } else {
+                         throw GeneratorIndentation.throwableError(value: value)
+                    }
+                } else {
+                    throw GeneratorIndentation.throwableError(value: value)
+                }
+                
+            } else {
+                 throw GeneratorIndentation.throwableError(value: value)
+            }
         }
+            
     }
     
     static func ==(lhs:GeneratorIndentation, rhs:GeneratorIndentation) -> Bool {
         return lhs.value == rhs.value
     }
     
+    static func throwableError(value:String) -> NSError {
+        return  NSError(domain: Config.errorDomain, code: 6, userInfo: [NSLocalizedDescriptionKey: "\(value) is not supported indentation option, read the user manual"])
+    }
 }
 
 class Processor {
@@ -91,7 +105,7 @@ class Processor {
     private var _xmlData:Data!
 
     var indentation : GeneratorIndentation!
-    var language:SupportLanguage = SupportLanguage(lang: Config.defaultLanguage)
+    var language:SupportLanguage
     let consoleOption:ConsoleOption
     
     init(consoleOption:ConsoleOption) {
@@ -124,12 +138,17 @@ class Processor {
                 let codeContent: [EntityFileContentHolder]!
                 
                 switch language {
+                    
+                case .java:
+                    let java = JavaGenerator(entities: gen.entities!, indent: indentation)
+                    codeContent = java.getFileConents()
                 case .kotlin:
                     let kotlin = KotlinGenerator(entities: gen.entities!, indent: indentation)
                     codeContent = kotlin.getFileConents()
-                default:
+                case .swift:
                     let swift = SwiftCodeGenerator(entities: gen.entities!, indent: indentation)
                     codeContent = swift.getFileConents()
+
                 }
                 
                 let saver = CodeFileSaver(files: codeContent, language: language, path: getFileSavingPath(), createNewDir: true)

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum OptionType: String {
+enum OptionType : String, CustomStringConvertible  {
     case file = "f"
     case genPath = "p"
     case lang = "l"
@@ -28,6 +28,19 @@ enum OptionType: String {
         default: self = .unknown
         }
     }
+    
+    var description: String {
+        switch self {
+        case .file: return "File (xcdatamodel file)"
+        case .genPath: return "Path (Place to save generated model files)"
+        case .lang: return "Programming language (swift, kotlin or java) default is swift"
+        case .indent: return "Indentation (tab/spaces) syntax is 'space:5', default is space:4"
+        case .help: return "Print Help text"
+        case .version: return "Print version number"
+        default : return "unknown"
+        }
+    }
+    
 }
 
 struct ConsoleOption : Equatable {
@@ -38,10 +51,11 @@ struct ConsoleOption : Equatable {
     var help:Bool = false
     var file:String? = nil
     var path:String? = nil
-    var lang:SupportLanguage = SupportLanguage(lang: Config.defaultLanguage)
+    var lang:SupportLanguage
     var indent:GeneratorIndentation = GeneratorIndentation.space(count: 4)
     
-    init(dict:[String:String]) {
+    init(dict:[String:String]) throws {
+        
         consoleValueDictionary = dict
         
         version = (dict["version"] == "true")
@@ -56,13 +70,30 @@ struct ConsoleOption : Equatable {
         }
         
         if let l = dict["lang"] {
-            lang = (l.characters.count > 0 ? SupportLanguage(lang:l) : SupportLanguage(lang: Config.defaultLanguage))
+            
+            if (l.characters.count > 0) {
+                do {
+                    lang = try SupportLanguage(lang: l)
+                } catch let e {
+                    throw e
+                }
+            } else {
+                lang = try! SupportLanguage(lang: Config.defaultLanguage)
+            }
+        
+        } else {
+            lang = try! SupportLanguage(lang: Config.defaultLanguage)
         }
         
         if let i = dict["indent"] {
             let v = (i.characters.count > 0) ? i : Config.defaultIndentation
-            indent = GeneratorIndentation(value: v)
+            do {
+                indent = try GeneratorIndentation(value: v)
+            } catch let e {
+                throw e
+            }
         }
+        
     }
     
     static func ==(lhs:ConsoleOption, rhs:ConsoleOption) -> Bool {
@@ -82,21 +113,16 @@ enum ConsoleOutputType {
 
 class ConsoleIO {
     class func printUsage() {
-        let executableName = (CommandLine.arguments[0] as NSString).lastPathComponent
+        let tab = "\t"
         
-        print("usage: ModelGen version \(Config.version)\n")
-        print("\(executableName) -f pathToDataModel")
-        print("or")
-        print("\(executableName) -p pathToDirToGenerateFiles")
-        print("or")
-        print("\(executableName) -l language(swift or java or kotlin)")
-        print("or")
-        print("\(executableName) -l indentation(space or tab) syntax is type:value (space:4), default is \(Config.defaultIndentation)")
-        print("or")
-        print("\(executableName) -v version")
-        print("or")
-        print("\(executableName) -h to show usage information")
-        print("Type \(executableName) without an option to enter interactive mode.")
+        print("\nUsage: ModelGen version \(Config.version)\n")
+        print("\(tab) -f pathToDataModel file, must be type of \(Config.xcDataModelExt)")
+        print("\(tab) -p pathToDirToGenerateFiles, any writable dir, if not defined gets same dir as the data model file")
+        print("\(tab) -l language(swift or java or kotlin), default is \(Config.defaultLanguage)")
+        print("\(tab) -i indentation(space or tab) syntax is type:value (space:4), default is \(Config.defaultIndentation)")
+        print("\(tab) -v version")
+        print("\(tab) -h to show usage information\n")
+    
     }
     
     func writeMessage(_ message: String, to: ConsoleOutputType = .standard) {
@@ -118,32 +144,10 @@ class ConsoleIO {
             throw NSError(domain: Config.errorDomain, code: 1, userInfo: [NSLocalizedDescriptionKey:"Not enough args passed: \(args.count)"])
         }
         
-        var filePath:String!
-        do {
-            let fileIndex = try optionIndexFinder(option: .file, args: args)
-            let filePathIndex = fileIndex + 1
-            filePath = args[filePathIndex]
-        } catch {
-            filePath = ""
-        }
-        
-        var genPath:String!
-        do {
-            let genIndex = try optionIndexFinder(option: .genPath, args: args)
-            let genPathIndex = genIndex + 1
-            genPath = args[genPathIndex]
-        } catch {
-            genPath = ""
-        }
-        
-        var lang:String!
-        do {
-            let langIndex = try optionIndexFinder(option: .lang, args: args)
-            let langValueIndex = langIndex + 1
-            lang = args[langValueIndex]
-        } catch {
-            lang = Config.defaultLanguage
-        }
+        let file = try getOptionValue(option: .file, args: args, defaultValue: "")
+        let genPath = try getOptionValue(option: .genPath, args: args, defaultValue: "")
+        let lang = try getOptionValue(option: .lang, args: args, defaultValue: Config.defaultLanguage)
+        let indent = try getOptionValue(option: .indent, args: args, defaultValue: Config.defaultIndentation)
         
         var helpText = "false"
         do {
@@ -161,19 +165,46 @@ class ConsoleIO {
             helpText = "false"
         }
 
-        var indent:String!
+        let dict = ["file":file,"path":genPath,"lang":lang, "indent":indent, "help":helpText, "version":versionText]
         do {
-            let indentIndex = try optionIndexFinder(option: .indent, args: args)
-            let indentValueIndex = indentIndex + 1
-            indent = args[indentValueIndex]
-        } catch {
-            indent = Config.defaultIndentation
+            let optionSet = try ConsoleOption(dict: dict)
+            return optionSet
+        } catch let e {
+            throw e
         }
         
-        let dict = ["file":filePath,"path":genPath,"lang":lang, "indent":indent, "help":helpText, "version":versionText]
-        let optionSet = ConsoleOption(dict: dict as! [String : String])
-        return optionSet
-        
+    }
+    
+    private func getOptionValue(option:OptionType, args:[String], defaultValue:String) throws -> String {
+        var value:String!
+        do {
+            let index = try optionIndexFinder(option: option, args: args)
+            value = try getValueForOption(option: option, args: args, index: index + 1)
+        } catch let e {
+            if isThrowableError(error: e) {
+                throw e
+            }
+            value = ""
+        }
+        return value
+    }
+    
+    
+    private func isThrowableError(error:Error) -> Bool {
+        let e = error as NSError
+        return e.domain == Config.errorDomain && e.code == 4
+    }
+    
+    private func getValueForOption(option:OptionType, args:[String], index:Int) throws -> String {
+        if !isArgsOutOfBound(args: args, index: index) {
+            return args[index]
+        } else {
+            throw NSError(domain: Config.errorDomain, code: 4, userInfo: [NSLocalizedDescriptionKey:"args is out of bound: \(args.count), -\(option.rawValue) param is defined but value is missing [-\(option.rawValue) = \(option.description)]"])
+        }
+    }
+    
+    private func isArgsOutOfBound(args:[Any],index:Int) ->Bool{
+        return index + 1 > args.count
     }
     
     private func optionIndexFinder(option:OptionType,args:[String]) throws -> Int {
