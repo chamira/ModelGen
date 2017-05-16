@@ -67,7 +67,7 @@ class CodeFileSaver {
     
     func createNewDir(path:String) -> (Bool,String?){
         
-        let newPath =  path+"/"+newDirName()
+        let newPath =  path+"/"+getNewDirName()
         
         if FileManager.default.fileExists(atPath: newPath) {
             return (true,newPath)
@@ -90,7 +90,7 @@ class CodeFileSaver {
         return (true,self.path)
     }
     
-    func newDirName()->String {
+    func getNewDirName()->String {
         return "ModelObjects-"+language.rawValue
     }
 }
