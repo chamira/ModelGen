@@ -52,7 +52,7 @@ class CodeFileSaver {
         for eachEntity in files {
             
             var s:CodeFileSaverStatus!
-            let _fileName = eachEntity.entity.className+"."+language.extension
+            let _fileName = eachEntity.fileName+"."+language.extension
             do {
                
                 let _dirToWrite = dirToWrite.1!

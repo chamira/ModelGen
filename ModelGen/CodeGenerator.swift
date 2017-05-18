@@ -15,6 +15,7 @@ protocol CodeGeneratorProtocol {
 
 struct EntityFileContentHolder {
     let entity:Entity
+    let fileName:String
     let content:String
 }
 
@@ -38,7 +39,7 @@ class JavaGenerator : CodeGenerator , CodeGeneratorProtocol {
         var files:[EntityFileContentHolder] = [EntityFileContentHolder]()
         for entity in entities {
             let str = "class \(entity.className)\n{\n}"
-            files.append(EntityFileContentHolder(entity: entity, content: str))
+            files.append(EntityFileContentHolder(entity: entity, fileName:entity.className, content: str))
         }
         
         return files
@@ -55,7 +56,7 @@ class KotlinGenerator : CodeGenerator , CodeGeneratorProtocol {
         var files:[EntityFileContentHolder] = [EntityFileContentHolder]()
         for entity in entities {
             let str = "class \(entity.className)\n{\n}"
-            files.append(EntityFileContentHolder(entity: entity, content: str))
+            files.append(EntityFileContentHolder(entity: entity, fileName:entity.className, content: str))
         }
         
         return files

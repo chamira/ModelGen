@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 enum SupportLanguage :String {
     
     case swift = "swift"
@@ -152,23 +151,25 @@ class Processor {
                     extContent = swift.getExtensionFileContents()
                 }
                 
-                let savePath = getFileSavingPath()
-                let saver = CodeFileSaver(files: codeContent, language: language, path: savePath, createNewDir: true, overwrite:true)
+                let savePath = try getFileSavingPath()
                 
                 do {
-                    
-                    let ret = try saver.save()
+                    var finalStatus:String = ""
+                    let saver = CodeFileSaver(files: codeContent, language: language, path: savePath, createNewDir: true, overwrite:true)
+                    finalStatus = try saver.save()
                     
                     if extContent != nil {
-                        let extSave = CodeFileSaver(files: extContent!, language: language, path: savePath, createNewDir: true, overwrite:false)
                         do {
-                            let exRet = try extSave.save()
-                            return (true, exRet, .standard)
+                            let extSave = CodeFileSaver(files: extContent!, language: language, path: savePath, createNewDir: true, overwrite:false)
+                            finalStatus += "\n"
+                            finalStatus += try extSave.save()
                         } catch let e {
                             return (false, e.localizedDescription, .error)
                         }
                     }
-                    return (true, ret, .standard)
+                    
+                    return (true, finalStatus, .standard)
+                    
                 } catch let e {
                     return (false, e.localizedDescription, .error)
                 }
@@ -183,30 +184,55 @@ class Processor {
     
     private func getModelName(filepath:String)->String {
         
-        let path = (filepath as NSString).pathExtension
-        //let name = path.replacingOccurrences(of: Config.xcDataModelExt, with: "").replacingOccurrences(of: ".", with: "")
-        return ""//name.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        let nsFileName = filepath as NSString
+        let path = nsFileName.lastPathComponent as NSString
+        let name = path.deletingPathExtension
+        return name.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         
     }
     
-    private func getFileSavingPath()->String {
+    private func getModelContentsPath(fromFilePath:String) throws -> String {
+    
+        let filepath = filepathBuidler(fromFilePath: fromFilePath)
+        
+        let fExtension = (filepath as NSString).pathExtension
+        
+        var path:String!
+        if fExtension == XCDataModelExtensionType.xcdatamodeld.rawValue {
+            path = filepath + "\(getModelName(filepath: filepath)).xcdatamodel/contents"
+        } else if fExtension == XCDataModelExtensionType.xcdatamodel.rawValue {
+             path = filepath + "contents"
+        } else {
+            throw NSError(domain: Config.errorDomain, code: 7, userInfo: [NSLocalizedDescriptionKey:"Data model file must have extension of \(Config.xcDataModelExt.joined(separator: ", ")), your file extension is \(fExtension)"])
+        }
+
+        return path.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+    }
+    
+    private func getFileSavingPath() throws -> String {
         if let filePath = consoleOption.path {
-            return filePath
+            return filepathBuidler(fromFilePath: filePath)
         }
         
         if let file = consoleOption.file {
-            return (file as NSString).deletingLastPathComponent
+            let contentsPath = filepathBuidler(fromFilePath: file)
+            return (contentsPath as NSString).deletingLastPathComponent
+        } else {
+            throw NSError(domain: Config.errorDomain, code: 8, userInfo: [NSLocalizedDescriptionKey:"No model file is defined"])
         }
-        
-        return ""
+    
+    }
+    
+    private func filepathBuidler(fromFilePath:String) -> String {
+        let initialPath = fromFilePath.hasSuffix("/") ? fromFilePath : fromFilePath + "/"
+        let filepath = initialPath.hasPrefix("/") ? initialPath : FileManager.default.currentDirectoryPath + "/" + initialPath
+        return filepath.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
     private func processXCDataModelFile(modelFile:String) -> (status:Bool,cleanFilePath:String?) {
         
         var filePath = modelFile
-        filePath = filePath.replacingOccurrences(of: "\"", with: "")
-        filePath = filePath.replacingOccurrences(of: "\'", with: "")
-        filePath = filePath.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        filePath = filePath.trimmingCharacters(in: CharacterSet(charactersIn: "\'\"")).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         
         if filePath.characters.count == 0 {
             return (false,"file path length is Zero(0)")
@@ -217,20 +243,26 @@ class Processor {
             return (false,"Data model file must have extension of \(Config.xcDataModelExt.joined(separator: ", ")), your file extension is \(pathExt)")
         }
         
-        let pathWithContent = filePath + "/\(getModelName(filepath: filePath)).xcdatamodel/contents"
-        if !FileManager.default.fileExists(atPath: pathWithContent) {
-            return (false,"Data model file does not exist at \(pathWithContent)")
+        do {
+            let pathWithContent = try getModelContentsPath(fromFilePath: filePath)
+            
+            if !FileManager.default.fileExists(atPath: pathWithContent) {
+                return (false,"Data model file does not exist at '\(pathWithContent)'")
+            }
+            
+            if !FileManager.default.isReadableFile(atPath: pathWithContent) {
+                return (false,"Data model file is not readable \(pathWithContent)")
+            }
+            
+            return (true,pathWithContent)
+            
+        } catch let e {
+            return (false,e.localizedDescription)
         }
-        
-        if !FileManager.default.isReadableFile(atPath: pathWithContent) {
-            return (false,"Data model file is not readable \(pathWithContent)")
-        }
-        
-        return (true,pathWithContent)
+    
     }
     
     private func readXCDataModelFile(path:String) throws -> Data {
-       
         
         do {
             let fileUrl =  URL(fileURLWithPath: path)
@@ -239,6 +271,7 @@ class Processor {
         } catch let e  {
             throw e
         }
+        
     }
     
     @discardableResult
@@ -316,8 +349,10 @@ class Processor {
                                         if let entryAtt = eachEntry.element?.allAttributes {
                                             
                                             if let key = entryAtt[kXMLAttribute.key]?.text, let value = entryAtt[kXMLAttribute.value]?.text {
-                                            
-                                                if key == kXMLValue.access {
+                                                
+                                                if key == kXMLValue.order {
+                                                    info.order = Int(value)!
+                                                } else if key == kXMLValue.access {
                                                     info.access = AccessControlType(type: value)
                                                 } else if key == kXMLValue.arc {
                                                     info.arc = ARCType(type: value)
@@ -334,8 +369,7 @@ class Processor {
                                 let attribute = Attribute(name: attName, dataType: attType, isOptional: attOptional, isScalarValueType: attScalarValueType, customClassName: attCustomClassName, defaultValue: attDefaultValue, info: info)
                                 
                                 attributes.append(attribute)
-
-                                
+ 
                             }
                             
                         }
@@ -475,9 +509,31 @@ struct Entity {
     let parentName:String?
     let codeGenType:CodeGenType
     let attributes:[Attribute]
+
+    init(name:String, className:String, parentName:String?, codeGenType:CodeGenType, attributes:[Attribute]) {
+        self.name = name
+        self.className = className
+        self.parentName = parentName
+        self.codeGenType = codeGenType
+        self.attributes = Entity.sortedAttributes(attributes: attributes)
+    }
+    
+    private static func sortedAttributes(attributes:[Attribute]) -> [Attribute] {
+        
+        let sorted = attributes.sorted { (a, b) -> Bool in
+            let _a = a.info?.order ?? Int.max
+            let _b = b.info?.order ?? Int.max
+            if (_a == _b) {
+                return a.name < b.name
+            }
+            return _a < _b
+        }
+
+        return sorted
+    }
 }
 
-struct Attribute : Equatable {
+struct Attribute : Equatable, CustomStringConvertible {
     
     let name:String
     let dataType:DataType
@@ -495,16 +551,21 @@ struct Attribute : Equatable {
         return info?.arc.value ?? ""
     }
     
+    var description: String {
+        return "Attribute:\(name) \(dataType) \(info?.order ?? 0)"
+    }
+    
     static func ==(lhs:Attribute, rhs:Attribute)->Bool {
         return lhs.name == rhs.name && lhs.dataType.rawValue == rhs.dataType.rawValue
     }
 }
 
 struct AttributeInfo {
+    var order:Int
     var arc:ARCType = .strong
     var mutable:BoolType = .yes
     var access:AccessControlType = .internal
-    static let kDefault = AttributeInfo(arc: .strong, mutable: .yes, access: .internal)
+    static let kDefault = AttributeInfo(order: Int.max, arc: .strong, mutable: .yes, access: .internal)
 }
 
 
@@ -535,6 +596,7 @@ struct kXMLValue {
     static let no = "NO"
     static let transformable = "Transformable"
     static let access = "access"
+    static let order = "order"
     static let `private` = "private"
     static let `public` = "public"
     static let `internal` = "intenal"

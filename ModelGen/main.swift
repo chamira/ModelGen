@@ -8,19 +8,22 @@
 
 import Foundation
 
+enum XCDataModelExtensionType : String {
+    case xcdatamodeld = "xcdatamodeld"
+    case xcdatamodel = "xcdatamodel"
+}
+
 struct Config {
     static let version = "0.0.1"
     static let errorDomain = "com.ModelGen"
     static let defaultLanguage = SupportLanguage.swift.rawValue
-    static let xcDataModelExt:[String] = ["xcdatamodeld","xcdatamodel"]
+    static let xcDataModelExt:[String] = [XCDataModelExtensionType.xcdatamodeld.rawValue,XCDataModelExtensionType.xcdatamodel.rawValue]
     static let defaultIndentation = "space:4"
 }
 
 class Main {
     
     let consoleIO = ConsoleIO()
-    
-    
     
     func start() {
         

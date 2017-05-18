@@ -22,7 +22,7 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
         var files:[EntityFileContentHolder] = [EntityFileContentHolder]()
         for entity in entities {
             let str = getEntityString(entity: entity)
-            files.append(EntityFileContentHolder(entity: entity, content: str))
+            files.append(EntityFileContentHolder(entity: entity, fileName:entity.className, content: str))
         }
         
         return files
@@ -33,7 +33,7 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
         var files:[EntityFileContentHolder] = [EntityFileContentHolder]()
         for entity in entities {
             let str = getEntityExtensionString(entity: entity)
-            files.append(EntityFileContentHolder(entity: entity, content: str))
+            files.append(EntityFileContentHolder(entity: entity, fileName:entity.className + "+Extension", content: str))
         }
         
         return files
@@ -134,7 +134,7 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
         var nonOptionalAtts:[Attribute] = [Attribute]()
         var superInit = ""
         var superNonOptionalAtts:[Attribute] = [Attribute]()
-        
+
         if let parentEntity = getEntityByName(entityName: entity.parentName) {
             superNonOptionalAtts = parentEntity.attributes.filter { $0.isOptional.value == false || $0.info?.mutable.value == false }
             superNonOptionalAtts.forEach { nonOptionalAtts.append($0) }

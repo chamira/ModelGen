@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Club" representedClassName="Club" parentEntity="ModelObject" syncable="YES" codeGenerationType="class">
+        <attribute name="chairman" optional="YES" attributeType="Transformable" customClassName="Contact" syncable="YES"/>
+        <attribute name="clubId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="colorCodes" optional="YES" attributeType="Transformable" customClassName="[UIColor]" syncable="YES"/>
+        <attribute name="emailAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="foundedDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="Transformable" customClassName="Location" syncable="YES"/>
+        <attribute name="logoUrls" optional="YES" attributeType="Transformable" customClassName="[URL]" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="teams" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="[Team]" syncable="YES"/>
+        <attribute name="website" optional="YES" attributeType="Transformable" customClassName="URL" syncable="YES"/>
+    </entity>
+    <entity name="Contact" representedClassName="Contact" parentEntity="ModelObject" syncable="YES" codeGenerationType="class">
+        <attribute name="emails" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumbers" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
+        <attribute name="role" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Customer" representedClassName="Customer" parentEntity="ModelObject" syncable="YES" codeGenerationType="class"/>
+    <entity name="Event" representedClassName="Event" parentEntity="ModelObject" syncable="YES" codeGenerationType="class"/>
+    <entity name="Location" representedClassName="Location" parentEntity="ModelObject" syncable="YES" codeGenerationType="category">
+        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="geo" optional="YES" attributeType="Transformable" customClassName="CLLocation" syncable="YES"/>
+        <attribute name="lat" attributeType="Double" defaultValueString="-180" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="long" attributeType="Double" defaultValueString="-180" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="streetName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Message" representedClassName="Message" parentEntity="ModelObject" syncable="YES" codeGenerationType="category"/>
+    <entity name="ModelObject" representedClassName="ModelObject" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES">
+            <userInfo>
+                <entry key="order" value="5"/>
+            </userInfo>
+        </attribute>
+        <attribute name="modifiedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES">
+            <userInfo>
+                <entry key="order" value="6"/>
+            </userInfo>
+        </attribute>
+        <attribute name="z" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <entity name="Player" representedClassName="Player" syncable="YES" codeGenerationType="class"/>
+    <entity name="Promotion" representedClassName="Promotion" parentEntity="ModelObject" syncable="YES" codeGenerationType="class">
+        <attribute name="skId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Team" representedClassName="Team" parentEntity="ModelObject" syncable="YES" codeGenerationType="class">
+        <attribute name="club" attributeType="Transformable" customClassName="Club" syncable="YES"/>
+        <attribute name="contacts" optional="YES" attributeType="Transformable" customClassName="[Contact]" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="teamId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="trainers" optional="YES" attributeType="Transformable" customClassName="[[String:UIColor]]" syncable="YES"/>
+    </entity>
+    <entity name="TestEntity" representedClassName="TestEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="a" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="b" optional="YES" transient="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="c" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="d" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="e" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="f" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="g" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="h" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="i" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="j" optional="YES" attributeType="Transformable" customClassName="[[String:UIColor]]" syncable="YES"/>
+        <attribute name="k" optional="YES" attributeType="Transformable" customClassName="Set&lt;Character&gt;" syncable="YES"/>
+        <attribute name="l" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="m" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="n" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="o" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="p" optional="YES" attributeType="Date" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="q" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="x" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES">
+            <userInfo>
+                <entry key="access" value="private"/>
+                <entry key="mutable" value="no"/>
+            </userInfo>
+        </attribute>
+    </entity>
+    <elements>
+        <element name="Club" positionX="-27" positionY="36" width="128" height="195"/>
+        <element name="Contact" positionX="27" positionY="81" width="128" height="105"/>
+        <element name="Customer" positionX="-18" positionY="36" width="128" height="45"/>
+        <element name="Event" positionX="-45" positionY="27" width="128" height="45"/>
+        <element name="Location" positionX="-9" positionY="45" width="128" height="148"/>
+        <element name="Message" positionX="9" positionY="63" width="128" height="45"/>
+        <element name="ModelObject" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="Player" positionX="18" positionY="171" width="128" height="45"/>
+        <element name="Promotion" positionX="0" positionY="54" width="128" height="60"/>
+        <element name="Team" positionX="-9" positionY="45" width="128" height="118"/>
+        <element name="TestEntity" positionX="9" positionY="108" width="128" height="313"/>
+    </elements>
+</model>
