@@ -12,7 +12,7 @@ struct Config {
     static let version = "0.0.1"
     static let errorDomain = "com.ModelGen"
     static let defaultLanguage = SupportLanguage.swift.rawValue
-    static let xcDataModelExt = "xcdatamodeld"
+    static let xcDataModelExt:[String] = ["xcdatamodeld","xcdatamodel"]
     static let defaultIndentation = "space:4"
 }
 

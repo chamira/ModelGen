@@ -26,12 +26,18 @@ class CodeFileSaver {
     let language:SupportLanguage
     let path:String
     let createNewDir:Bool
+    let overwrite:Bool
     
-    init(files:[EntityFileContentHolder], language:SupportLanguage, path:String, createNewDir:Bool = true) {
+    init(files:[EntityFileContentHolder],
+         language:SupportLanguage,
+         path:String,
+         createNewDir:Bool = true,
+         overwrite:Bool = false) {
         self.files = files
         self.language = language
         self.createNewDir = createNewDir
         self.path = path
+        self.overwrite = overwrite
     }
     
     func save() throws -> String {
@@ -52,9 +58,22 @@ class CodeFileSaver {
                 let _dirToWrite = dirToWrite.1!
                 let fileName = (_dirToWrite + (_dirToWrite.hasSuffix("/") ? "" :"/") + _fileName).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                 
-                try eachEntity.content.write(toFile: fileName, atomically: true, encoding: String.Encoding.utf8)
+                var write:Bool = false
+                if (overwrite) {
+                    write = true
+                } else {
+                    if !FileManager.default.fileExists(atPath: fileName) {
+                        write = true
+                    }
+                }
                 
-                s = CodeFileSaverStatus(fileName: fileName, status: (true,fileName))
+                if write {
+                    try eachEntity.content.write(toFile: fileName, atomically: true, encoding: String.Encoding.utf8)
+                    s = CodeFileSaverStatus(fileName: fileName, status: (true,fileName))
+                } else {
+                    s = CodeFileSaverStatus(fileName: fileName, status: (false,"File does exist, did not overwrite")) //not over write
+                }
+                
                 
             } catch let e {
                 s = CodeFileSaverStatus(fileName: _fileName, status: (false,e.localizedDescription))

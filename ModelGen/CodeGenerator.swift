@@ -10,6 +10,7 @@ import Foundation
 
 protocol CodeGeneratorProtocol {
     func getFileConents() -> [EntityFileContentHolder]
+    func getExtensionFileContents() -> [EntityFileContentHolder]?
 }
 
 struct EntityFileContentHolder {
@@ -42,6 +43,10 @@ class JavaGenerator : CodeGenerator , CodeGeneratorProtocol {
         
         return files
     }
+    
+    func getExtensionFileContents() -> [EntityFileContentHolder]? {
+        return nil
+    }
 }
 
 class KotlinGenerator : CodeGenerator , CodeGeneratorProtocol {
@@ -54,5 +59,9 @@ class KotlinGenerator : CodeGenerator , CodeGeneratorProtocol {
         }
         
         return files
+    }
+    
+    func getExtensionFileContents() -> [EntityFileContentHolder]? {
+        return nil
     }
 }

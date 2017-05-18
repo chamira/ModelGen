@@ -133,40 +133,49 @@ class Processor {
             
             if gen.status == true {
                 
-                //gen.generate()
-                
                 let codeContent: [EntityFileContentHolder]!
+                var extContent : [EntityFileContentHolder]?
                 
                 switch language {
                     
                 case .java:
                     let java = JavaGenerator(entities: gen.entities!, indent: indentation)
                     codeContent = java.getFileConents()
+                    extContent = java.getExtensionFileContents()
                 case .kotlin:
                     let kotlin = KotlinGenerator(entities: gen.entities!, indent: indentation)
                     codeContent = kotlin.getFileConents()
+                    extContent = kotlin.getExtensionFileContents()
                 case .swift:
                     let swift = SwiftCodeGenerator(entities: gen.entities!, indent: indentation)
                     codeContent = swift.getFileConents()
-
+                    extContent = swift.getExtensionFileContents()
                 }
                 
-                let saver = CodeFileSaver(files: codeContent, language: language, path: getFileSavingPath(), createNewDir: true)
+                let savePath = getFileSavingPath()
+                let saver = CodeFileSaver(files: codeContent, language: language, path: savePath, createNewDir: true, overwrite:true)
                 
                 do {
                     
                     let ret = try saver.save()
-                    return (true, ret, .standard)
                     
+                    if extContent != nil {
+                        let extSave = CodeFileSaver(files: extContent!, language: language, path: savePath, createNewDir: true, overwrite:false)
+                        do {
+                            let exRet = try extSave.save()
+                            return (true, exRet, .standard)
+                        } catch let e {
+                            return (false, e.localizedDescription, .error)
+                        }
+                    }
+                    return (true, ret, .standard)
                 } catch let e {
                     return (false, e.localizedDescription, .error)
                 }
                 
-            
             } else {
                 return (false, gen.msg, .error)
             }
-            
         } catch let e {
             return (false,"Error: \(e.localizedDescription)",.error)
         }
@@ -174,9 +183,9 @@ class Processor {
     
     private func getModelName(filepath:String)->String {
         
-        let path = (filepath as NSString).lastPathComponent
-        let name = path.replacingOccurrences(of: Config.xcDataModelExt, with: "").replacingOccurrences(of: ".", with: "")
-        return name.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        let path = (filepath as NSString).pathExtension
+        //let name = path.replacingOccurrences(of: Config.xcDataModelExt, with: "").replacingOccurrences(of: ".", with: "")
+        return ""//name.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         
     }
     
@@ -204,8 +213,8 @@ class Processor {
         }
         
         let pathExt = (filePath as NSString).pathExtension
-        if  pathExt != Config.xcDataModelExt {
-            return (false,"Data model file must have extension of \(Config.xcDataModelExt), your file extension is \(pathExt)")
+        if  !Config.xcDataModelExt.contains(pathExt) {
+            return (false,"Data model file must have extension of \(Config.xcDataModelExt.joined(separator: ", ")), your file extension is \(pathExt)")
         }
         
         let pathWithContent = filePath + "/\(getModelName(filepath: filePath)).xcdatamodel/contents"

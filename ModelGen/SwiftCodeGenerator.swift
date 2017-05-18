@@ -29,6 +29,27 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
     }
     
     
+    func getExtensionFileContents() -> [EntityFileContentHolder]? {
+        var files:[EntityFileContentHolder] = [EntityFileContentHolder]()
+        for entity in entities {
+            let str = getEntityExtensionString(entity: entity)
+            files.append(EntityFileContentHolder(entity: entity, content: str))
+        }
+        
+        return files
+
+    }
+    
+    func getEntityExtensionString(entity:Entity) -> String {
+        var str = "//\n//\(indentation.value)\(entity.className)+Extension.swift\n" +
+            "//\(indentation.value)Created by ModelGen - v\(Config.version)\n" +
+        "//\n\n"
+        
+        str += "extension \(entity.className) {\n"
+        str += "\n}\n"
+        return str
+    }
+    
     func getEntityString(entity:Entity)->String {
         
         var str = "//\n//\(indentation.value)\(entity.className).swift\n" +
