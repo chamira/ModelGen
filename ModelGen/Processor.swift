@@ -160,7 +160,7 @@ class Processor {
                     
                     if extContent != nil {
                         do {
-                            let extSave = CodeFileSaver(files: extContent!, language: language, path: savePath, createNewDir: true, overwrite:false)
+                            let extSave = CodeFileSaver(files: extContent!, language: language, path: savePath, createNewDir: true, overwrite:true)
                             finalStatus += "\n"
                             finalStatus += try extSave.save()
                         } catch let e {
@@ -309,6 +309,30 @@ class Processor {
         var entities:[Entity] = [Entity]()
         
         for xmlEntity in xmlEntities {
+    
+            let entityUserInfo = xmlEntity[kXMLElement.userInfo]
+            
+            var entityInfo = EntityInfo.kDefault
+            for eachUserInfo in entityUserInfo {
+                
+                let entries = eachUserInfo[kXMLElement.entry]
+                
+                for eachEntry in entries {
+                    
+                    if let entryAtt = eachEntry.element?.allAttributes {
+                        
+                        if let key = entryAtt[kXMLAttribute.key]?.text, let value = entryAtt[kXMLAttribute.value]?.text {
+                        
+                            if key == kXMLValue.type {
+                                if value == kXMLValue.struct {
+                                    entityInfo.modelType = .struct
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            }
             
             //each entity must have a name
             if let entityAttributes = xmlEntity.element?.allAttributes {
@@ -323,7 +347,7 @@ class Processor {
                     
                     let parentName = entityAttributes[kXMLAttribute.parentEntity]?.text
                     let codeType = entityAttributes[kXMLAttribute.codeGenerationType]?.text ?? "class"
-                    
+
                     let fields = xmlEntity[kXMLElement.attribute]
                     var attributes:[Attribute] = [Attribute]()
                     for field in fields {
@@ -376,15 +400,14 @@ class Processor {
 
                     }
                     
-                    let entity:Entity = Entity(name: name, className: clsName!, parentName: parentName, codeGenType: CodeGenType(type:codeType), attributes:attributes)
-                    
+                    var entity:Entity = Entity(name: name, className: clsName!, parentName: parentName, codeGenType: CodeGenType(type:codeType), attributes:attributes)
+                    entity.info = entityInfo
                     entities.append(entity)
                     
                 }
             
             }
             
-
         }
         
         return entities
@@ -392,10 +415,10 @@ class Processor {
 }
 
 enum CodeGenType : String {
-    case `class` = "class", category = "category"
+    case `class` = "class", `struct` = "struct"
     init(type:String) {
-        if type.lowercased() == "category" {
-            self = .category
+        if type.lowercased() == "struct" {
+            self = .`struct`
         } else {
             self = .class
         }
@@ -509,7 +532,8 @@ struct Entity {
     let parentName:String?
     let codeGenType:CodeGenType
     let attributes:[Attribute]
-
+    var info:EntityInfo = EntityInfo.kDefault
+    
     init(name:String, className:String, parentName:String?, codeGenType:CodeGenType, attributes:[Attribute]) {
         self.name = name
         self.className = className
@@ -560,6 +584,11 @@ struct Attribute : Equatable, CustomStringConvertible {
     }
 }
 
+struct EntityInfo {
+    var modelType:CodeGenType
+    static let kDefault = EntityInfo(modelType: CodeGenType(type: "class"))
+}
+
 struct AttributeInfo {
     var order:Int
     var arc:ARCType = .strong
@@ -606,4 +635,7 @@ struct kXMLValue {
     static let weak = "weak"
     static let strong = "strong"
     static let mutable = "mutable"
+    static let type = "type"
+    static let `struct` = "struct"
+    static let `class` = "class"
 }

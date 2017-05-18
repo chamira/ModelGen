@@ -13,7 +13,6 @@
 		535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */; };
 		535F4FFA1EC59ECD00DE9656 /* Processor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Processor.swift */; };
 		535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */; };
-		537553721ECDAE76008F6CE3 /* ObjectModel.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 537553711ECDAE76008F6CE3 /* ObjectModel.xcdatamodel */; };
 		53F21DA11EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */; };
 		53F21DA21EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */; };
 		98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C908201EC71343008696E3 /* CodeGenerator.swift */; };
@@ -233,7 +232,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				537553721ECDAE76008F6CE3 /* ObjectModel.xcdatamodel in Sources */,
 				535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */,
 				535F4FEB1EC4732C00DE9656 /* main.swift in Sources */,
 				535625EB1ECB40240084E97B /* SwiftCodeGenerator.swift in Sources */,
