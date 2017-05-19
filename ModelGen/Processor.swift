@@ -47,15 +47,19 @@ enum GeneratorIndentation : Equatable {
         
         var str = ""
         switch self {
-            case let .tab (value):
-            
-                for _ in 1...value {
+            case let .tab (c):
+                if (c <= 0) {
+                    return ""
+                }
+                for _ in 1...c {
                     str += "\t"
                 }
             
-            case let .space (value):
-            
-                for _ in 1...value {
+            case let .space (c):
+                if (c <= 0) {
+                    return ""
+                }
+                for _ in 1...c {
                     str += " "
                 }
         }
@@ -222,13 +226,7 @@ class Processor {
         }
     
     }
-    
-    private func filepathBuidler(fromFilePath:String) -> String {
-        let initialPath = fromFilePath.hasSuffix("/") ? fromFilePath : fromFilePath + "/"
-        let filepath = initialPath.hasPrefix("/") ? initialPath : FileManager.default.currentDirectoryPath + "/" + initialPath
-        return filepath.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-    }
-    
+        
     private func processXCDataModelFile(modelFile:String) -> (status:Bool,cleanFilePath:String?) {
         
         var filePath = modelFile
@@ -555,6 +553,15 @@ struct Entity {
 
         return sorted
     }
+    
+    var isChild: Bool {
+        if let p = parentName, p.characters.count > 0 {
+            return true
+        }
+        
+        return false
+    }
+        
 }
 
 struct Attribute : Equatable, CustomStringConvertible {

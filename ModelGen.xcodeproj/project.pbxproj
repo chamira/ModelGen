@@ -13,6 +13,8 @@
 		535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF61EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift */; };
 		535F4FFA1EC59ECD00DE9656 /* Processor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF91EC59ECD00DE9656 /* Processor.swift */; };
 		535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */; };
+		5375539C1ECED8B8008F6CE3 /* CodeGeneratorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375539B1ECED8B8008F6CE3 /* CodeGeneratorHelper.swift */; };
+		5375539F1ECF04E8008F6CE3 /* SwiftBasicProtocolImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375539E1ECF04E8008F6CE3 /* SwiftBasicProtocolImp.swift */; };
 		53F21DA11EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */; };
 		53F21DA21EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */; };
 		98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C908201EC71343008696E3 /* CodeGenerator.swift */; };
@@ -47,6 +49,8 @@
 		535F4FF91EC59ECD00DE9656 /* Processor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Processor.swift; sourceTree = "<group>"; };
 		535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleIO.swift; sourceTree = "<group>"; };
 		537553711ECDAE76008F6CE3 /* ObjectModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = ObjectModel.xcdatamodel; path = Example/ObjectModel.xcdatamodel; sourceTree = "<group>"; };
+		5375539B1ECED8B8008F6CE3 /* CodeGeneratorHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGeneratorHelper.swift; sourceTree = "<group>"; };
+		5375539E1ECF04E8008F6CE3 /* SwiftBasicProtocolImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftBasicProtocolImp.swift; sourceTree = "<group>"; };
 		53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeFileSaver.swift; sourceTree = "<group>"; };
 		98C908201EC71343008696E3 /* CodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 		98D86C681EC98F9F007BC1EC /* ModelGenTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ModelGenTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,13 +107,14 @@
 		535F4FE91EC4732C00DE9656 /* ModelGen */ = {
 			isa = PBXGroup;
 			children = (
+				5375539D1ECF04C2008F6CE3 /* Swift */,
 				535F4FF41EC59E4500DE9656 /* frameworks */,
 				535F4FEA1EC4732C00DE9656 /* main.swift */,
 				535F4FF91EC59ECD00DE9656 /* Processor.swift */,
 				98C908201EC71343008696E3 /* CodeGenerator.swift */,
 				535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */,
 				53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */,
-				535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */,
+				5375539B1ECED8B8008F6CE3 /* CodeGeneratorHelper.swift */,
 			);
 			path = ModelGen;
 			sourceTree = "<group>";
@@ -129,6 +134,15 @@
 				537553711ECDAE76008F6CE3 /* ObjectModel.xcdatamodel */,
 			);
 			name = Example;
+			sourceTree = "<group>";
+		};
+		5375539D1ECF04C2008F6CE3 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */,
+				5375539E1ECF04E8008F6CE3 /* SwiftBasicProtocolImp.swift */,
+			);
+			name = Swift;
 			sourceTree = "<group>";
 		};
 		98D86C691EC98F9F007BC1EC /* ModelGenTest */ = {
@@ -232,8 +246,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5375539C1ECED8B8008F6CE3 /* CodeGeneratorHelper.swift in Sources */,
 				535F4FFC1EC59EE800DE9656 /* ConsoleIO.swift in Sources */,
 				535F4FEB1EC4732C00DE9656 /* main.swift in Sources */,
+				5375539F1ECF04E8008F6CE3 /* SwiftBasicProtocolImp.swift in Sources */,
 				535625EB1ECB40240084E97B /* SwiftCodeGenerator.swift in Sources */,
 				535F4FFA1EC59ECD00DE9656 /* Processor.swift in Sources */,
 				53F21DA11EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */,
