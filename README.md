@@ -7,13 +7,12 @@ Initial idea is to generate **.swift**, **.kotlin** and **.java**
 **xcdatamodel** file is used by **Xcode** to generate codedata objects in ios/macos projects. Why can't it be used to generate non-coredata model objects?
 
 # How to use it?
-  * Create new xcdatamodel file in your Xcode project.
-  * Remove created xcdatamodel from the target (if it's is added)
-  * Add Entities Of the model
+  * Create new **.xcdatamodel** file in your Xcode project. (Highlight Xcode project->NewFile->Data Model under Core Data)
+  * Remove created **.xcdatamodel** from the target (if it's is added), This is very important otherwise there will be compile errors.
+  * Add Entities of the model
   * Add Attributes of each entity, and define data type and default value of each attribute in *Model inspector pane*.
   * Add Entity or Attribute options for special cases
-  * Run
-
+  * Download ModelGen change dir to ModelGenExecutable and run  
   `./ModelGen -f path/to/created/object.xcdatamodel`  
 
 ### Entity option
