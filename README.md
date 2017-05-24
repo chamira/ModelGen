@@ -33,7 +33,7 @@ Attribute options can be added under **User info** section
 
   `order = integer (0...)` defines sort order of the attribute list, this is useful if you want attribute to be in certain order.
   `access = private | fileprivate | internal | public | open` default `internal`  
-  `mutable = yes | no` default `no` (this defines var or let in **.swift**)  
+  `mutable = yes | no` default `no` (this defines **var** or **let** in **.swift**)  
   `arc = strong | weak` default `strong`  
   `hash = yes | no` default `no` (Special case when Swift **Hashable** Protocol is used, an attribute can be defined as hash)  
 
