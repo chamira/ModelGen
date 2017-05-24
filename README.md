@@ -46,12 +46,15 @@ Attribute options can be added under **User info** section
 `-v version`  
 `-h to show usage information`  
 
-# SWIFT
-## init method & swift extensions
+## SWIFT
+### init method & swift extensions
 * `init(...) {}` method is generated with all immutable properties as params, order of the params can be defined `order = integer (0...)`
 * for each and every model object swift **extension** is generated in a separate file. This is extension file would not be overwritten thus the business logic can be written there.
 
-## Swift Protocols implementation
+### import modules
+* import swift modules by looking at the data types prefixes i.e. if an attribute has dataType or CLLocation ModelGen imports CoreLocation module.
+
+### Swift Protocols implementation
 If you want to auto generate some Swift protocols as the part of the model generation have a look at **SwiftBasicProtocolImp.swift**  
 implement **SwiftBasicProtocolTemplate** and add implemented protocol to **SwiftBasicProtocol.list** array.
 Example:  
