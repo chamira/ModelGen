@@ -64,8 +64,11 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
         var str = fileHeader(fileName: entity.className + "Extension", language: .swift, showWarning: false)
         
         let basicProtocolList = SwiftBasicProtocol.list.filter { $0.implementaionIn == .extension }
+        
         for item  in  basicProtocolList {
+            
             var extend = ""
+        
             if entity.info.modelType == .struct || !entity.isChild {
                 extend = " : " + item.name
             }
@@ -144,10 +147,10 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
         //Logic: 
         //Protocols can be implemetned in class/struct or an extension
         //Since this is a class imp, filter protocols that should be imp in this class.
-        //If Entity is a parent class, even though imp happens in extension still the declaration of the protocol stack must be added($protocolStacl$)
+        //If Entity is a parent class, even though imp happens in extension still the declaration of the protocol stack must be added($protocolStack$)
         var protocolsStackGen:[SwiftBasicProtocolTemplate]
         if entity.isChild {
-            protocolsStackGen = SwiftBasicProtocol.list.filter{ $0.implementaionIn == .class }
+            protocolsStackGen = SwiftBasicProtocol.list.filter{ $0.implementaionIn == .classOrStruct }
         } else {
             protocolsStackGen = SwiftBasicProtocol.list
         }
@@ -162,11 +165,11 @@ class SwiftCodeGenerator : CodeGenerator, CodeGeneratorProtocol {
             replaceDict["$protocolStack$"] = ""
         }
         
-        let protocols = SwiftBasicProtocol.list.filter{ $0.implementaionIn == .class }
+        let protocols = SwiftBasicProtocol.list.filter{ $0.implementaionIn == .classOrStruct }
         //Add Swift basic protocols
         var methodStack = [String]()
         for eachImp in  protocols {
-            let str = eachImp.codeForEnitity(entity: entity, indent: indentation)
+            let str = newline(eachImp.codeForEnitity(entity: entity, indent: indentation))
             methodStack.append(str)
          }
 

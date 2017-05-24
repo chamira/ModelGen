@@ -24,23 +24,25 @@ class CodeFileSaver {
     
     let files:[EntityFileContentHolder]
     let language:SupportLanguage
-    let path:String
-    let createNewDir:Bool
-    let overwrite:Bool
+    private(set) var path:String!
+    private(set) var createNewDir:Bool!
+    private(set) var overwrite:Bool!
+    private(set) var dirName:String!
     
-    init(files:[EntityFileContentHolder],
-         language:SupportLanguage,
-         path:String,
-         createNewDir:Bool = true,
-         overwrite:Bool = false) {
+    static let kDefaultDirName = "ModelObjectsGenerated"
+    init(files:[EntityFileContentHolder], language:SupportLanguage) {
+        
         self.files = files
         self.language = language
-        self.createNewDir = createNewDir
-        self.path = path
-        self.overwrite = overwrite
+
     }
     
-    func save() throws -> String {
+    func save(atPath:String, createNewDir:Bool = true, dirName:String? = CodeFileSaver.kDefaultDirName, overwrite:Bool = false) throws -> String {
+        
+        self.createNewDir = createNewDir
+        self.path = atPath
+        self.overwrite = overwrite
+        self.dirName = dirName
         
         var status:[String] = [String]()
         
@@ -112,6 +114,10 @@ class CodeFileSaver {
     }
     
     func getNewDirName()->String {
-        return "ModelObjects-"+language.rawValue
+        if (dirName == CodeFileSaver.kDefaultDirName) {
+            return CodeFileSaver.kDefaultDirName + "-" + language.rawValue
+        } else {
+            return dirName
+        }
     }
 }

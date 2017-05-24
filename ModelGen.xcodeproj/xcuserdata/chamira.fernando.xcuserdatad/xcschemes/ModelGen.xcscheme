@@ -67,7 +67,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Volumes/dev/iOS/TestProjects/ModelGenExample/ObjectModel2.xcdatamodeld"
+            argument = "/Volumes/dev/iOS/TestProjects/ModelGenExample/ModelGenExample/ObjectModel.xcdatamodeld"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

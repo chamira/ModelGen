@@ -110,9 +110,9 @@
 				5375539D1ECF04C2008F6CE3 /* Swift */,
 				535F4FF41EC59E4500DE9656 /* frameworks */,
 				535F4FEA1EC4732C00DE9656 /* main.swift */,
+				535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */,
 				535F4FF91EC59ECD00DE9656 /* Processor.swift */,
 				98C908201EC71343008696E3 /* CodeGenerator.swift */,
-				535F4FFB1EC59EE800DE9656 /* ConsoleIO.swift */,
 				53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */,
 				5375539B1ECED8B8008F6CE3 /* CodeGeneratorHelper.swift */,
 			);

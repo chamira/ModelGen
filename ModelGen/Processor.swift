@@ -156,17 +156,17 @@ class Processor {
                 }
                 
                 let savePath = try getFileSavingPath()
-                
+                let modelName = getModelName(filepath: file)
                 do {
                     var finalStatus:String = ""
-                    let saver = CodeFileSaver(files: codeContent, language: language, path: savePath, createNewDir: true, overwrite:true)
-                    finalStatus = try saver.save()
+                    let saver = CodeFileSaver(files: codeContent, language: language)
+                    finalStatus = try saver.save(atPath: savePath, createNewDir: true, dirName:modelName, overwrite: true)
                     
                     if extContent != nil {
                         do {
-                            let extSave = CodeFileSaver(files: extContent!, language: language, path: savePath, createNewDir: true, overwrite:true)
+                            let extSave = CodeFileSaver(files: extContent!, language: language)
                             finalStatus += "\n"
-                            finalStatus += try extSave.save()
+                            finalStatus += try extSave.save(atPath: savePath, createNewDir: true, dirName: modelName, overwrite: true)
                         } catch let e {
                             return (false, e.localizedDescription, .error)
                         }
@@ -380,6 +380,8 @@ class Processor {
                                                     info.arc = ARCType(type: value)
                                                 } else if key == kXMLValue.mutable {
                                                     info.mutable = BoolType(value: value)
+                                                } else if key == kXMLValue.hash {
+                                                    info.hash = BoolType(value: value)
                                                 }
                                             }
                                             
@@ -426,7 +428,7 @@ enum CodeGenType : String {
 enum BoolType : String {
     case yes = "YES", no = "NO"
     init(value:String) {
-        if value.uppercased() == "YES" {
+        if value.uppercased() == "YES" || value.uppercased() == "TRUE" {
             self = .yes
         } else {
             self = .no
@@ -522,6 +524,10 @@ enum DataType : String {
         }
     }
     
+    var isInt:Bool {
+        return (self == .int64 || self == .int32 || self == .int16)
+    }
+    
 }
 
 struct Entity {
@@ -601,7 +607,8 @@ struct AttributeInfo {
     var arc:ARCType = .strong
     var mutable:BoolType = .yes
     var access:AccessControlType = .internal
-    static let kDefault = AttributeInfo(order: Int.max, arc: .strong, mutable: .yes, access: .internal)
+    var hash:BoolType
+    static let kDefault = AttributeInfo(order: Int.max, arc: .strong, mutable: .yes, access: .internal, hash: .no)
 }
 
 
@@ -645,4 +652,5 @@ struct kXMLValue {
     static let type = "type"
     static let `struct` = "struct"
     static let `class` = "class"
+    static let hash = "hash"
 }
