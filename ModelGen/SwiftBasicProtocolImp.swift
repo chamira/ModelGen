@@ -9,7 +9,11 @@
 import Foundation
 
 struct SwiftBasicProtocol {
-    static let list:[SwiftBasicProtocolTemplate] = [SwiftCustomStringConvertible(),SwiftEquatable() /*,SwiftHashable()*/] // Add SwiftHashable if you want to
+    static let list:[SwiftBasicProtocolTemplate] = [
+        SwiftCustomStringConvertible(),
+        SwiftEquatable()
+        /*,SwiftHashable()*/ // Add SwiftHashable if you want to
+    ]
 }
 
 enum SwiftBasicProtocolImpOption {

@@ -166,7 +166,7 @@ class Processor {
                         do {
                             let extSave = CodeFileSaver(files: extContent!, language: language)
                             finalStatus += "\n"
-                            finalStatus += try extSave.save(atPath: savePath, createNewDir: true, dirName: modelName, overwrite: true)
+                            finalStatus += try extSave.save(atPath: savePath, createNewDir: true, dirName: modelName, overwrite: false)
                         } catch let e {
                             return (false, e.localizedDescription, .error)
                         }
