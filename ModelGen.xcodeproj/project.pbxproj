@@ -40,6 +40,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5329551A1ED5B2CC003BC0C7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCodeGenerator.swift; sourceTree = "<group>"; };
 		535F4FE71EC4732C00DE9656 /* ModelGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ModelGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		535F4FEA1EC4732C00DE9656 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 		535F4FDE1EC4732C00DE9656 = {
 			isa = PBXGroup;
 			children = (
+				5329551A1ED5B2CC003BC0C7 /* LICENSE */,
 				537553701ECDAE38008F6CE3 /* Example */,
 				535F4FE91EC4732C00DE9656 /* ModelGen */,
 				98D86C691EC98F9F007BC1EC /* ModelGenTest */,
