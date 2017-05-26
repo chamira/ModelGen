@@ -48,7 +48,7 @@ class CodeFileSaver {
         
         let dirToWrite = getDirToWrite()
         if (dirToWrite.0 == false) {
-            throw NSError(domain: Config.errorDomain, code: 3, userInfo: [NSLocalizedDescriptionKey: dirToWrite.1!])
+            throw ErrorRegistry.fileIO(errorDesc: dirToWrite.1!)
         }
         
         for eachEntity in files {

@@ -23,7 +23,7 @@ enum SupportLanguage :String {
         case "swift":
             self = .swift
         default:
-            throw NSError(domain: Config.errorDomain, code: 5, userInfo: [NSLocalizedDescriptionKey: "Language \(lang) is not supported"])
+            throw ErrorRegistry.notSupportedLanguage(lang: lang)
         }
     }
     
@@ -81,14 +81,14 @@ enum GeneratorIndentation : Equatable {
                     } else if type == "space" || type == "spaces" {
                         self = .space(count: count)
                     } else {
-                         throw GeneratorIndentation.throwableError(value: value)
+                         throw ErrorRegistry.notSupportedIndentation(value:value)
                     }
                 } else {
-                    throw GeneratorIndentation.throwableError(value: value)
+                    throw ErrorRegistry.notSupportedIndentation(value:value)
                 }
                 
             } else {
-                 throw GeneratorIndentation.throwableError(value: value)
+                 throw ErrorRegistry.notSupportedIndentation(value:value)
             }
         }
             
@@ -98,9 +98,6 @@ enum GeneratorIndentation : Equatable {
         return lhs.value == rhs.value
     }
     
-    static func throwableError(value:String) -> NSError {
-        return  NSError(domain: Config.errorDomain, code: 6, userInfo: [NSLocalizedDescriptionKey: "\(value) is not supported indentation option, read the user manual"])
-    }
 }
 
 class Processor {
@@ -207,7 +204,7 @@ class Processor {
         } else if fExtension == XCDataModelExtensionType.xcdatamodel.rawValue {
              path = filepath + "contents"
         } else {
-            throw NSError(domain: Config.errorDomain, code: 7, userInfo: [NSLocalizedDescriptionKey:"Data model file must have extension of \(Config.xcDataModelExt.joined(separator: ", ")), your file extension is \(fExtension)"])
+            throw ErrorRegistry.wrongDataModelFileExtension(value: fExtension)
         }
 
         return path.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -222,7 +219,7 @@ class Processor {
             let contentsPath = filepathBuidler(fromFilePath: file)
             return (contentsPath as NSString).deletingLastPathComponent
         } else {
-            throw NSError(domain: Config.errorDomain, code: 8, userInfo: [NSLocalizedDescriptionKey:"No model file is defined"])
+            throw ErrorRegistry.noDataModelIsDefined()
         }
     
     }

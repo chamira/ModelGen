@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		533B08281ED813110038393B /* SwiftCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */; };
+		533B08291ED813110038393B /* SwiftBasicProtocolImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375539E1ECF04E8008F6CE3 /* SwiftBasicProtocolImp.swift */; };
+		533B082A1ED813110038393B /* CodeGeneratorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5375539B1ECED8B8008F6CE3 /* CodeGeneratorHelper.swift */; };
+		533B082C1ED818C80038393B /* ErrorRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B082B1ED818C80038393B /* ErrorRegistry.swift */; };
+		533B082D1ED81D890038393B /* ErrorRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B082B1ED818C80038393B /* ErrorRegistry.swift */; };
 		535625EB1ECB40240084E97B /* SwiftCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */; };
 		535F4FEB1EC4732C00DE9656 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FEA1EC4732C00DE9656 /* main.swift */; };
 		535F4FF71EC59E5B00DE9656 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F4FF51EC59E5B00DE9656 /* SWXMLHash.swift */; };
@@ -41,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		5329551A1ED5B2CC003BC0C7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		533B082B1ED818C80038393B /* ErrorRegistry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorRegistry.swift; sourceTree = "<group>"; };
 		535625EA1ECB40240084E97B /* SwiftCodeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftCodeGenerator.swift; sourceTree = "<group>"; };
 		535F4FE71EC4732C00DE9656 /* ModelGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ModelGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		535F4FEA1EC4732C00DE9656 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -117,6 +123,7 @@
 				98C908201EC71343008696E3 /* CodeGenerator.swift */,
 				53F21DA01EC9C09B006BFDCF /* CodeFileSaver.swift */,
 				5375539B1ECED8B8008F6CE3 /* CodeGeneratorHelper.swift */,
+				533B082B1ED818C80038393B /* ErrorRegistry.swift */,
 			);
 			path = ModelGen;
 			sourceTree = "<group>";
@@ -258,6 +265,7 @@
 				535F4FF81EC59E5B00DE9656 /* SWXMLHash+TypeConversion.swift in Sources */,
 				535F4FF71EC59E5B00DE9656 /* SWXMLHash.swift in Sources */,
 				98C908211EC71343008696E3 /* CodeGenerator.swift in Sources */,
+				533B082C1ED818C80038393B /* ErrorRegistry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +273,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				533B082D1ED81D890038393B /* ErrorRegistry.swift in Sources */,
+				533B08281ED813110038393B /* SwiftCodeGenerator.swift in Sources */,
+				533B08291ED813110038393B /* SwiftBasicProtocolImp.swift in Sources */,
+				533B082A1ED813110038393B /* CodeGeneratorHelper.swift in Sources */,
 				98D86C711EC99096007BC1EC /* SWXMLHash.swift in Sources */,
 				98D86C721EC99096007BC1EC /* SWXMLHash+TypeConversion.swift in Sources */,
 				53F21DA21EC9C09B006BFDCF /* CodeFileSaver.swift in Sources */,

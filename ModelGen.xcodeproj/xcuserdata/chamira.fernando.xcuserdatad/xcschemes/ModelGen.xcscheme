@@ -28,6 +28,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "98D86C671EC98F9F007BC1EC"
+               BuildableName = "ModelGenTest.xctest"
+               BlueprintName = "ModelGenTest"
+               ReferencedContainer = "container:ModelGen.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
@@ -62,6 +72,10 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-i"
+            isEnabled = "YES">
+         </CommandLineArgument>
          <CommandLineArgument
             argument = "-f"
             isEnabled = "YES">

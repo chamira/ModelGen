@@ -41,6 +41,10 @@ enum OptionType : String, CustomStringConvertible  {
         }
     }
     
+    static func all()->[OptionType] {
+        return [.file,.genPath,.lang,.indent,.help,.version]
+    }
+    
 }
 
 struct ConsoleOption : Equatable {
@@ -192,14 +196,14 @@ class ConsoleIO {
     
     private func isThrowableError(error:Error) -> Bool {
         let e = error as NSError
-        return e.domain == Config.errorDomain && e.code == 4
+        return e.domain == Config.errorDomain && e.code == ErrorCode.optionValueIsMissing.rawValue
     }
     
     private func getValueForOption(option:OptionType, args:[String], index:Int) throws -> String {
         if !isArgsOutOfBound(args: args, index: index) {
             return args[index]
         } else {
-            throw NSError(domain: Config.errorDomain, code: 4, userInfo: [NSLocalizedDescriptionKey:"args is out of bound: \(args.count), -\(option.rawValue) param is defined but value is missing [-\(option.rawValue) = \(option.description)]"])
+            throw ErrorRegistry.optionValueIsMissing(option: option)
         }
     }
     
@@ -211,7 +215,7 @@ class ConsoleIO {
         
         let value = "-"+option.rawValue
         guard let index = args.index(of: value) else {
-            throw NSError(domain:Config.errorDomain, code: 2, userInfo: [NSLocalizedDescriptionKey:"\(value) option is not available on the args list"])
+            throw ErrorRegistry.optionNotAvailable(option: option)
         }
         
         return index
